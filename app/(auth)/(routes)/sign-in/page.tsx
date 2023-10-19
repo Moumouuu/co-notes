@@ -1,7 +1,12 @@
-import React from 'react'
+import { Metadata } from "next";
 
-export default function SignIn() {
-  return (
-    <div>SignIn</div>
-  )
+import UserAuthForm from "@/components/form/form-auth-user";
+
+export const metadata: Metadata = {
+  title: "EduFiche | Authentication",
+  description: "Page d'autentification de l'application EduFiche",
+};
+
+export default function AuthenticationPage() {
+  return <UserAuthForm />;
 }
