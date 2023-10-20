@@ -1,8 +1,8 @@
 import { getUser } from "@/actions/get-user";
+import AsideMenu from "@/components/aside-menu";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { redirect } from "next/navigation";
-
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -16,14 +16,19 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  //todo verif si redirect marche
+  // todo: verif si redirect marche
   const user = await getUser();
   if (!user) {
     redirect("/sign-in");
   }
   return (
     <html lang="fr">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <main className="flex">
+          <AsideMenu currentUser={user} />
+          {children}
+        </main>
+      </body>
     </html>
   );
 }

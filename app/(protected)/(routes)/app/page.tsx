@@ -1,3 +1,3 @@
 export default function Home() {
-  return <div>Hellow worl</div>;
+  return <div>contnet</div>;
 }
