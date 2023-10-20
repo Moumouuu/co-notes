@@ -1,17 +1,19 @@
 "use client";
 
+import LinkPreview from "@/components/preview";
 import axios from "axios";
 import Link from "next/link";
 import { useState } from "react";
 
-import type { Note } from "@prisma/client";
+import type { Note, User } from "@prisma/client";
 
 import { AiFillHeart, AiOutlineDownload, AiOutlineHeart } from "react-icons/ai";
 
 interface NoteProps {
+  currentUser: User;
   note: Note & {
     _count: {
-      like: number;
+      likes: number;
     };
     likes: {
       id: string;
@@ -21,13 +23,12 @@ interface NoteProps {
   };
 }
 
-export default function note({ note }: NoteProps) {
-  //todo : add link to note
+export default function note({ note, currentUser }: NoteProps) {
   // todo : add preview of note
-  const userLiked = note.likes?.some((like) => like.userId === note.userId);
+  const userLiked = note.likes?.some((like) => like.userId === currentUser.id);
 
   const [isLiked, setIsLiked] = useState(userLiked || false);
-  const [numberOfLikes, setNumberOfLikes] = useState(note._count.like || 0);
+  const [numberOfLikes, setNumberOfLikes] = useState(note._count.likes || 0);
 
   const handleLike = async (noteId: string) => {
     try {
@@ -71,6 +72,7 @@ export default function note({ note }: NoteProps) {
             <p>{numberOfLikes}</p>
           </div>
         </div>
+        <LinkPreview url={"http://localhost:3000/app"} />
       </div>
     </div>
   );

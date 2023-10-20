@@ -1,5 +1,4 @@
 "use client";
-
 import { LogOut } from "lucide-react";
 import { AiFillHome } from "react-icons/ai";
 import { BsFillPlusCircleFill } from "react-icons/bs";
@@ -7,6 +6,8 @@ import { FiMoreVertical } from "react-icons/fi";
 import { HiTemplate } from "react-icons/hi";
 import { IoSettings } from "react-icons/io5";
 
+import newNote from "@/actions/new-note";
+import ToggleTheme from "@/components/toggle-theme";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,13 +16,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Image from "next/image";
-import Link from "next/link";
-
 import type { User } from "@prisma/client";
 import { signOut } from "next-auth/react";
-
-import ToggleTheme from "@/components/toggle-theme";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function AsideMenuContent({
   currentUser,
@@ -29,15 +28,17 @@ export default function AsideMenuContent({
   currentUser: User;
 }) {
   const workdir = "/app";
+  const router = useRouter();
   const menuItems = [
     {
-      title: "Home",
+      title: "Accueil",
       href: `${workdir}`,
       icon: <AiFillHome size={20} />,
     },
     {
-      title: "Notes",
-      href: `${workdir}/notes`,
+      title: "Note Rapide",
+      href: "#",
+      onClick: () => newNote(router),
       icon: <BsFillPlusCircleFill size={20} />,
     },
     {
@@ -46,7 +47,7 @@ export default function AsideMenuContent({
       icon: <HiTemplate size={20} />,
     },
     {
-      title: "Settings",
+      title: "Paramètres",
       href: `${workdir}/settings`,
       icon: <IoSettings size={20} />,
     },
@@ -67,16 +68,18 @@ export default function AsideMenuContent({
       <div className="flex flex-col w-full h-[88%] justify-between mt-10 md:mt-0 md:p-2">
         <div className="flex flex-col">
           {menuItems.map((item, index) => (
-            <Link
-              key={index}
-              href={item.href}
-              className="flex items-center w-full h-16 hover:bg-primary/10 rounded-md"
-            >
-              <div className="flex items-center p-2">
-                <span>{item.icon}</span>
-                <span className="ml-2 text-xl">{item.title}</span>
-              </div>
-            </Link>
+            <div onClick={item?.onClick}>
+              <Link
+                key={index}
+                href={item?.href}
+                className="flex items-center w-full h-16 hover:bg-primary/10 rounded-md"
+              >
+                <div className="flex items-center p-2">
+                  <span>{item.icon}</span>
+                  <span className="ml-2 text-xl">{item.title}</span>
+                </div>
+              </Link>
+            </div>
           ))}
         </div>
         <div className="flex w-full items-center justify-between">
