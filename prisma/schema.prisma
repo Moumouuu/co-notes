@@ -15,11 +15,11 @@ model User {
   email    String  @unique
   name     String?
   password String?
-  image    String?  @default("/public/images/default.png")
+  image    String? @default("/public/images/default.png")
   // all of the notes that this user has (with shared notes)
-  Note     Note[]
+  notes    Note[]
   // all likes of the users
-  Like     Like[]
+  likes    Like[]
 }
 
 model Note {
@@ -32,9 +32,9 @@ model Note {
   published      Boolean  @default(false)
   linkInvitation String?  @default(uuid())
   userId         String
-  Like           Like[]
+  likes          Like[]
   // all of the users that have access to this note
-  User           User[]
+  users          User[]
 }
 
 model Like {

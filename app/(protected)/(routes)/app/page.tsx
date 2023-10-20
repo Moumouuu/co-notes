@@ -1,7 +1,10 @@
 import { getUser } from "@/actions/get-user";
-import Note from "@/components/note";
 import prismadb from "@/lib/prismadb";
 import { redirect } from "next/navigation";
+
+import Note from "@/components/note";
+
+import type { Like } from "@prisma/client";
 
 export default async function Home() {
   const user = await getUser();
@@ -9,103 +12,40 @@ export default async function Home() {
     redirect("/sign-in");
   }
 
-  const allNotes = await prismadb.note.findMany({
+  const allUserNotes = await prismadb.note.findMany({
     where: {
       userId: user.id,
     },
+    orderBy: {
+      updatedAt: "desc",
+    },
+    take: 15,
+    include: {
+      likes: true,
+      _count: {
+        select: {
+          likes: true,
+        },
+      },
+    },
   });
 
-  const test = [
-    {
-      id: "1",
-      title: "test",
-      content: "test",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      numberDownload: 0,
-      published: false,
-      linkInvitation: "1",
-      userId: "1",
-      Like: [],
-      User: [],
-    },
-    {
-      id: "1",
-      title: "test",
-      content: "test",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      numberDownload: 0,
-      published: false,
-      linkInvitation: "1",
-      userId: "1",
-      Like: [],
-      User: [],
-    },
-    {
-      id: "1",
-      title: "test",
-      content: "test",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      numberDownload: 0,
-      published: false,
-      linkInvitation: "1",
-      userId: "1",
-      Like: [],
-      User: [],
-    },
-    {
-      id: "1",
-      title: "test",
-      content: "test",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      numberDownload: 0,
-      published: false,
-      linkInvitation: "1",
-      userId: "1",
-      Like: [],
-      User: [],
-    },
-    {
-      id: "1",
-      title: "test",
-      content: "test",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      numberDownload: 0,
-      published: false,
-      linkInvitation: "1",
-      userId: "1",
-      Like: [],
-      User: [],
-    },
-    {
-      id: "1",
-      title: "test",
-      content: "test",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      numberDownload: 0,
-      published: false,
-      linkInvitation: "1",
-      userId: "1",
-      Like: [],
-      User: [],
-    },
-  ];
+  const userFavoritesNotes = allUserNotes.filter((note: any) => {
+    return note.like?.map((like: Like) => like.userId === user.id);
+  });
 
-  console.log(allNotes);
+  console.log(allUserNotes);
+  console.log(userFavoritesNotes);
+
   // todo : filter notes to have only mine
   // todo : filter notes to have only my favorites
   return (
     <div className="w-full flex flex-col pt-10 overflow-y-scroll h-screen">
       <h1 className="text-2xl md:text-3xl text-center">Mes notes</h1>
       <div className="flex flex-col mt-10 mx-4">
-        <h2 className="text-2xl md:text-3xl">Mes 💜 </h2>
-        <div className="flex overflow-x-auto">
-          {test.map((note) => (
+        <h2 className="text-2xl md:text-3xl">Mes dernières notes 🗒️</h2>
+        <div className="flex overflow-x-auto space-x-8 w-full">
+          {allUserNotes?.map((note: any) => (
             <Note key={note.id} note={note} />
           ))}
         </div>
