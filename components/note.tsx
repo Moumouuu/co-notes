@@ -1,12 +1,10 @@
 "use client";
 
-import LinkPreview from "@/components/preview";
+import { cn } from "@/lib/utils";
+import type { Note, User } from "@prisma/client";
 import axios from "axios";
 import Link from "next/link";
 import { useState } from "react";
-
-import type { Note, User } from "@prisma/client";
-
 import { AiFillHeart, AiOutlineDownload, AiOutlineHeart } from "react-icons/ai";
 
 interface NoteProps {
@@ -24,7 +22,6 @@ interface NoteProps {
 }
 
 export default function note({ note, currentUser }: NoteProps) {
-  // todo : add preview of note
   const userLiked = note.likes?.some((like) => like.userId === currentUser.id);
 
   const [isLiked, setIsLiked] = useState(userLiked || false);
@@ -46,33 +43,37 @@ export default function note({ note, currentUser }: NoteProps) {
   };
 
   return (
-    <div className="my-10 w-[300px] h-[300px] flex-shrink-0 border rounded-xl shadow-lg mx-4">
+    <div
+      className={cn(
+        "my-10 w-[300px] h-[300px] flex-shrink-0 border rounded-xl shadow-lg mx-4",
+        `bg-[url('/${note.image}.png')]`
+      )}
+    >
       <div className="h-full flex flex-col justify-between">
         <Link href={`/app/note/${note.id}`} className="h-full">
           <div className="flex flex-col">
-            <div className="flex flex-row justify-between items-center px-4 py-2">
+            <div className="flex flex-row justify-between items-center px-4 py-2 text-black">
               <h3 className="text-xl font-bold">{note.title}</h3>
             </div>
           </div>
         </Link>
         <div className="flex flex-row justify-between items-center px-4 py-2">
           <div className="flex flex-row items-center">
-            <AiOutlineDownload className="mr-2" />
-            <p>{note.numberDownload}</p>
+            <AiOutlineDownload className="mr-2" color={"black"} />
+            <p className="text-black">{note.numberDownload}</p>
           </div>
           <div
             className="flex flex-row items-center cursor-pointer"
             onClick={() => handleLike(note.id)}
           >
             {isLiked ? (
-              <AiFillHeart className="mr-2" />
+              <AiFillHeart className="mr-2" color={"red"} />
             ) : (
-              <AiOutlineHeart className="mr-2" />
+              <AiOutlineHeart className="mr-2" color={"black"} />
             )}
-            <p>{numberOfLikes}</p>
+            <p className="text-black">{numberOfLikes}</p>
           </div>
         </div>
-        <LinkPreview url={"http://localhost:3000/app"} />
       </div>
     </div>
   );

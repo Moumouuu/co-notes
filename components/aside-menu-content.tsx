@@ -68,7 +68,7 @@ export default function AsideMenuContent({
       <div className="flex flex-col w-full h-[88%] justify-between mt-10 md:mt-0 md:p-2">
         <div className="flex flex-col">
           {menuItems.map((item, index) => (
-            <div onClick={item?.onClick}>
+            <div key={index} onClick={item?.onClick}>
               <Link
                 key={index}
                 href={item?.href}
