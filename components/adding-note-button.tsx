@@ -3,7 +3,7 @@ import newNote from "@/actions/new-note";
 import { useRouter } from "next/navigation";
 import { AiOutlinePlus } from "react-icons/ai";
 
-export default function addingNoteButton() {
+export default function AddingNoteButton() {
   const router = useRouter();
   return (
     <div

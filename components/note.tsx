@@ -21,7 +21,7 @@ interface NoteProps {
   };
 }
 
-export default function note({ note, currentUser }: NoteProps) {
+export default function Note({ note, currentUser }: NoteProps) {
   const userLiked = note.likes?.some((like) => like.userId === currentUser.id);
 
   const [isLiked, setIsLiked] = useState(userLiked || false);
