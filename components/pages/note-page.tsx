@@ -6,7 +6,7 @@ import { BlockNoteView, useBlockNote } from "@blocknote/react";
 import { Note } from "@prisma/client";
 import axios from "axios";
 import { useTheme } from "next-themes";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import NavNoteButtons from "../nav-note-buttons";
 
 export default function NotePage({ note }: { note: Note }) {
@@ -30,6 +30,7 @@ export default function NotePage({ note }: { note: Note }) {
   */
 
   const { resolvedTheme } = useTheme();
+  const title = useRef<HTMLHeadingElement | null>(null); // Spécifiez le type ici
 
   const editor: BlockNoteEditor = useBlockNote({
     editable: true,
@@ -47,7 +48,9 @@ export default function NotePage({ note }: { note: Note }) {
     // Si le contenu n'a pas changé, on ne fait rien
     if (
       JSON.stringify(lastTopLevelBlocks) ===
-      JSON.stringify(editor.topLevelBlocks)
+        JSON.stringify(editor.topLevelBlocks) &&
+      title.current &&
+      title.current.innerText === note.title
     )
       return;
     try {
@@ -55,6 +58,7 @@ export default function NotePage({ note }: { note: Note }) {
       await axios.put("/api/note", {
         idNote: note.id,
         content: content,
+        title: (title.current && title.current.innerText) ?? note.title,
       });
     } catch (error) {
       console.error(`Erreur lors de la sauvegarde automatique : ${error}`);
@@ -85,7 +89,9 @@ export default function NotePage({ note }: { note: Note }) {
   return (
     <div className="w-full h-screen overflow-y-scroll mt-12 md:mt-5">
       <div className="z-40 flex w-full md:w-[80%] items-center justify-between fixed top-0 backdrop-blur-sm py-3 px-5">
-        <h1 className="text-2xl md:text-3xl">{note.title}</h1>
+        <h1 ref={title} className="text-2xl md:text-3xl" contentEditable>
+          {note.title}
+        </h1>
         <NavNoteButtons note={note} />
       </div>
       <BlockNoteView

@@ -40,7 +40,7 @@ export async function PUT(req: NextRequest, res: NextResponse) {
 
   if (!session?.user?.email) return;
 
-  const { idNote, content } = await req.json();
+  const { idNote, content, title } = await req.json();
 
   const updatedNote = await prismadb.note.update({
     where: {
@@ -48,6 +48,7 @@ export async function PUT(req: NextRequest, res: NextResponse) {
     },
     data: {
       content: JSON.stringify(content),
+      title,
     },
   });
 
