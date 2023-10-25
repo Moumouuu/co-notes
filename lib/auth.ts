@@ -65,7 +65,7 @@ export const authOptions: NextAuthOptions = {
     },
     async redirect({ url, baseUrl }) {
       console.log("fire redirect Callback");
-      return baseUrl;
+      return baseUrl + "/app";
     },
     async session({ session, token }) {
       return session;
