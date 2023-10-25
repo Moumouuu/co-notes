@@ -32,3 +32,24 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
   return NextResponse.json(newNotes);
 }
+
+export async function PUT(req: NextRequest, res: NextResponse) {
+  const session = await getServerSession(authOptions);
+
+  if (!session) return;
+
+  if (!session?.user?.email) return;
+
+  const { idNote, content } = await req.json();
+
+  const updatedNote = await prismadb.note.update({
+    where: {
+      id: idNote,
+    },
+    data: {
+      content: JSON.stringify(content),
+    },
+  });
+
+  return NextResponse.json(updatedNote);
+}

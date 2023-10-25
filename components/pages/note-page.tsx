@@ -1,14 +1,12 @@
 "use client";
-import { BlockNoteEditor } from "@blocknote/core";
+import { customDarkTheme } from "@/lib/block-note";
+import { Block, BlockNoteEditor } from "@blocknote/core";
 import "@blocknote/core/style.css";
-import {
-  BlockNoteView,
-  Theme,
-  lightDefaultTheme,
-  useBlockNote,
-} from "@blocknote/react";
+import { BlockNoteView, useBlockNote } from "@blocknote/react";
 import { Note } from "@prisma/client";
+import axios from "axios";
 import { useTheme } from "next-themes";
+import { useEffect } from "react";
 import NavNoteButtons from "../nav-note-buttons";
 
 export default function NotePage({ note }: { note: Note }) {
@@ -33,45 +31,55 @@ export default function NotePage({ note }: { note: Note }) {
 
   const { resolvedTheme } = useTheme();
 
-  // Custom dark theme
-  const customDarkTheme = {
-    // @ts-ignore
-    type: "light",
-    colors: {
-      editor: {
-        text: "#ffffff",
-        background: "#020817",
-      },
-      menu: {
-        text: "#ffffff",
-        background: "#020817",
-      },
-      tooltip: {
-        text: "#ffffff",
-        background: "#020817",
-      },
-      hovered: {
-        text: "#ffffff",
-        background: "#280032",
-      },
-      selected: {
-        text: "#ffffff",
-        background: "#020817",
-      },
-      disabled: {
-        text: "#9b0000",
-        background: "#020817",
-      },
-      shadow: "#280032",
-      border: "#280032",
-      sideMenu: "#fff",
-      highlightColors: lightDefaultTheme.colors.highlightColors,
-    },
-    borderRadius: 4,
-    fontFamily: "Helvetica Neue, sans-serif",
-  } satisfies Theme;
+  const editor: BlockNoteEditor = useBlockNote({
+    editable: true,
+    initialContent: note.content
+      ? (JSON.parse(note.content) as Block[])
+      : undefined,
+  });
 
-  const editor: BlockNoteEditor = useBlockNote({});
+  var lastTopLevelBlocks: Block[] = note.content
+    ? JSON.parse(note.content)
+    : [];
+
+  // Fonction à appeler toutes les 10 secondes
+  const saveContent = async () => {
+    // Si le contenu n'a pas changé, on ne fait rien
+    if (
+      JSON.stringify(lastTopLevelBlocks) ===
+      JSON.stringify(editor.topLevelBlocks)
+    )
+      return;
+    try {
+      const content: Block[] = editor.topLevelBlocks;
+      await axios.put("/api/note", {
+        idNote: note.id,
+        content: content,
+      });
+    } catch (error) {
+      console.error(`Erreur lors de la sauvegarde automatique : ${error}`);
+    }
+  };
+
+  // Utilisation de useEffect pour définir un intervalle de 5 secondes
+  useEffect(() => {
+    const interval = setInterval(() => {
+      saveContent();
+    }, 10000); // 10000 millisecondes (10 secondes)
+
+    // Fonction pour arrêter l'intervalle lorsque le composant est démonté
+    return () => {
+      clearInterval(interval);
+    };
+  }, []); // Vide le tableau de dépendances pour que cela s'exécute une seule fois à la création du composant
+
+  useEffect(() => {
+    window.addEventListener("beforeunload", saveContent);
+
+    return () => {
+      window.removeEventListener("beforeunload", saveContent);
+    };
+  }, []);
 
   // Renders the editor instance using a React component.
   return (
