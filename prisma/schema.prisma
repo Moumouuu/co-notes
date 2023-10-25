@@ -32,7 +32,7 @@ model Note {
   published      Boolean  @default(false)
   linkInvitation String?  @default(uuid())
   userId         String
-  image          String?  @default("images/default-note")
+  image          String?
   likes          Like[]
   // all of the users that have access to this note
   users          User[]

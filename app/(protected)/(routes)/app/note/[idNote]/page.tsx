@@ -28,9 +28,5 @@ export default async function page({ params }: { params: { idNote: string } }) {
     return redirect("/app");
   }
 
-  return (
-    <div>
-      <NotePage note={note} />
-    </div>
-  );
+  return <NotePage note={note} />;
 }
