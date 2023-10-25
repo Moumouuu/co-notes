@@ -9,6 +9,7 @@ import {
 } from "@blocknote/react";
 import { Note } from "@prisma/client";
 import { useTheme } from "next-themes";
+import NavNoteButtons from "../nav-note-buttons";
 
 export default function NotePage({ note }: { note: Note }) {
   /*const generateScreenshot = async () => {
@@ -74,8 +75,13 @@ export default function NotePage({ note }: { note: Note }) {
 
   // Renders the editor instance using a React component.
   return (
-    <div className="w-full h-screen overflow-y-scroll">
+    <div className="w-full h-screen overflow-y-scroll mt-12 md:mt-5">
+      <div className="z-40 flex w-full md:w-[80%] items-center justify-between fixed top-0 backdrop-blur-sm py-3 px-5">
+        <h1 className="text-2xl md:text-3xl">{note.title}</h1>
+        <NavNoteButtons note={note} />
+      </div>
       <BlockNoteView
+        className="mt-14 md:mt-20"
         editor={editor}
         theme={resolvedTheme === "light" ? "light" : customDarkTheme}
       />
