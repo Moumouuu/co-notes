@@ -15,7 +15,7 @@ import Image from "next/image";
 export default function AsideMenu({ currentUser }: { currentUser: User }) {
   return (
     <>
-      <div className="block md:hidden absolute top-2 left-2">
+      <div className="block md:hidden absolute top-2 left-2 z-50">
         <Sheet>
           <SheetTrigger asChild className="m-3 cursor-pointer">
             <AiOutlineMenu size={30} />
