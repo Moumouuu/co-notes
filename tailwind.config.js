@@ -16,6 +16,9 @@ module.exports = {
       },
     },
     extend: {
+      backgroundImage:{
+        "no-background-note" : "url('/images/default-note.png')"
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

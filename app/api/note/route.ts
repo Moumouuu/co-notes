@@ -22,7 +22,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     data: {
       title: "Untitled Note",
       userId: user.id,
-      image: "images/default-note",
+      image: "images/default-note.png",
       users: {
         connect: {
           id: user.id,

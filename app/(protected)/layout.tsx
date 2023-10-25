@@ -16,7 +16,6 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // todo: verif si redirect marche
   const user = await getUser();
   if (!user) {
     redirect("/sign-in");

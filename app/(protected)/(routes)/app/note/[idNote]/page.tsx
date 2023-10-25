@@ -1,25 +1,36 @@
-"use client";
-import axios from "axios";
-import { useEffect } from "react";
+import { getUser } from "@/actions/get-user";
+import NotePage from "@/components/pages/note-page";
+import prismadb from "@/lib/prismadb";
+import { redirect } from "next/navigation";
 
-export default function page() {
-  // todo : setup it as og:image for sharing
+export default async function page({ params }: { params: { idNote: string } }) {
+  const user = await getUser();
+  const idNote = params.idNote;
+  const note = await prismadb.note.findUnique({
+    where: {
+      id: idNote,
+    },
+    include: {
+      users: true,
+    },
+  });
 
-  useEffect(() => {
-    generateScreenshot();
-  }, []);
+  if (!note) {
+    return (
+      <>
+        <h1>Not found</h1>
+      </>
+    );
+  }
 
-  const generateScreenshot = async () => {
-    try {
-      const res = await axios.post("/api/screenshot", {
-        url: "https://www.google.com",
-      });
-      // todo : save screenshot in db and use it as og:image for sharing
-      // todo : remove old screen for this note
-    } catch (error) {
-      console.error(`Error while generating screenshot: ${error}`);
-    }
-  };
+  // protect page from other users
+  if (user && !note.users.find((u) => u.id === user.id)) {
+    return redirect("/app");
+  }
 
-  return <div>Page de note</div>;
+  return (
+    <div>
+      <NotePage note={note} />
+    </div>
+  );
 }

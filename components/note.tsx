@@ -29,7 +29,7 @@ export default function Note({ note, currentUser }: NoteProps) {
 
   const handleLike = async (noteId: string) => {
     try {
-      await axios.post("/api/like", { noteId });
+      await axios.post("/api/note/like", { noteId });
       setIsLiked((prev) => !prev);
       setNumberOfLikes((prev) => (isLiked ? prev - 1 : prev + 1));
     } catch (e) {
@@ -46,7 +46,7 @@ export default function Note({ note, currentUser }: NoteProps) {
     <div
       className={cn(
         "my-10 w-[300px] h-[300px] flex-shrink-0 border rounded-xl shadow-lg mx-4",
-        `bg-[url('/${note.image}.png')]`
+        note.image ? "bg-white" : "bg-no-background-note"
       )}
     >
       <div className="h-full flex flex-col justify-between">
