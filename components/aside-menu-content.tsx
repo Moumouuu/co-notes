@@ -94,7 +94,7 @@ export default function AsideMenuContent({
               className="rounded-md"
             />
             <span className="ml-2 text-xl md:text-2xl">
-              {currentUser?.name ?? currentUser.email}
+              {currentUser?.name ?? currentUser.email.split("@")[0]}
             </span>
             <div className="m-4">
               <DropdownMenuLogout />

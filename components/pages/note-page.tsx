@@ -30,7 +30,7 @@ export default function NotePage({ note }: { note: Note }) {
   */
 
   const { resolvedTheme } = useTheme();
-  const title = useRef<HTMLHeadingElement | null>(null); // Spécifiez le type ici
+  const title = useRef<HTMLHeadingElement | null>(null);
 
   const editor: BlockNoteEditor = useBlockNote({
     editable: true,
@@ -43,7 +43,6 @@ export default function NotePage({ note }: { note: Note }) {
     ? JSON.parse(note.content)
     : [];
 
-  // Fonction à appeler toutes les 10 secondes
   const saveContent = async () => {
     // Si le contenu n'a pas changé, on ne fait rien
     if (
@@ -65,11 +64,10 @@ export default function NotePage({ note }: { note: Note }) {
     }
   };
 
-  // Utilisation de useEffect pour définir un intervalle de 5 secondes
   useEffect(() => {
     const interval = setInterval(() => {
       saveContent();
-    }, 10000); // 10000 millisecondes (10 secondes)
+    }, 5000);
 
     // Fonction pour arrêter l'intervalle lorsque le composant est démonté
     return () => {
@@ -85,17 +83,20 @@ export default function NotePage({ note }: { note: Note }) {
     };
   }, []);
 
-  // Renders the editor instance using a React component.
   return (
-    <div className="w-full h-screen overflow-y-scroll mt-12 md:mt-5">
-      <div className="z-40 flex w-full md:w-[80%] items-center justify-between fixed top-0 backdrop-blur-sm py-3 px-5">
-        <h1 ref={title} className="text-2xl md:text-3xl" contentEditable>
+    <div className="w-full h-screen overflow-y-scroll pt-12 md:pt-5">
+      <div className="z-40 flex w-full md:w-[80%] items-center justify-between fixed top-0 backdrop-blur-sm py-5 px-10 pt-12 md:pt-5">
+        <h1
+          ref={title}
+          className="text-3xl md:text-4xl font-bold"
+          contentEditable
+        >
           {note.title}
         </h1>
         <NavNoteButtons note={note} />
       </div>
       <BlockNoteView
-        className="mt-14 md:mt-20"
+        className="mt-20"
         editor={editor}
         theme={resolvedTheme === "light" ? "light" : customDarkTheme}
       />
