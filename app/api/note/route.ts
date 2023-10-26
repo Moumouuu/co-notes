@@ -16,7 +16,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     },
   });
 
-  if (!user) throw new Error("User not found");
+  if (!user) throw new Response("User not found");
 
   const newNotes = await prismadb.note.create({
     data: {
@@ -39,7 +39,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     },
   });
 
-  if (!rightUser) throw new Error("User not found");
+  if (!rightUser) throw new Response("User not found");
 
   return NextResponse.json(newNotes);
 }

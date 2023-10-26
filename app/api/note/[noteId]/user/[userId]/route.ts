@@ -13,11 +13,11 @@ export async function DELETE(
   const session = await getServerSession(authOptions);
 
   if (!session || !noteId) {
-    return new Error("No session or noteId");
+    return new Response("No session or noteId");
   }
 
   if (!session?.user?.email) {
-    return new Error("No session user email");
+    return new Response("No session user email");
   }
 
   const user = await prismadb.user.findFirst({
@@ -27,7 +27,7 @@ export async function DELETE(
   });
 
   if (!user) {
-    return new Error("User not found");
+    return new Response("User not found");
   }
 
   const note = await prismadb.note.findUnique({
@@ -37,7 +37,7 @@ export async function DELETE(
   });
 
   if (!note) {
-    return new Error("Note not found");
+    return new Response("Note not found");
   }
 
   if (user.id !== note.userId) {
@@ -71,11 +71,11 @@ export async function PUT(
   const session = await getServerSession(authOptions);
 
   if (!session || !noteId) {
-    return new Error("No session or noteId");
+    return new Response("No session or noteId");
   }
 
   if (!session?.user?.email) {
-    return new Error("No session user email");
+    return new Response("No session user email");
   }
 
   const user = await prismadb.user.findFirst({
@@ -85,7 +85,7 @@ export async function PUT(
   });
 
   if (!user) {
-    return new Error("User not found");
+    return new Response("User not found");
   }
   const resRole = await prismadb.userRightNote.update({
     where: {

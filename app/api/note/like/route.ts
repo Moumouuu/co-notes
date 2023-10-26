@@ -9,8 +9,8 @@ export async function POST(req: NextRequest) {
 
   const session = await getServerSession(authOptions);
 
-  if (!noteId) throw new Error("postId is required");
-  if (!session?.user?.email) throw new Error("No user connected");
+  if (!noteId) throw new Response("postId is required");
+  if (!session?.user?.email) throw new Response("No user connected");
 
   const currentUser = await prismadb.user.findFirst({
     where: {
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     },
   });
 
-  if (!currentUser) throw new Error("No user found");
+  if (!currentUser) throw new Response("No user found");
 
   // create like if not exist or delete it if exist
   const like = await prismadb.like.findFirst({

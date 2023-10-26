@@ -54,7 +54,7 @@ export async function PUT(req: NextRequest, res: NextResponse) {
     },
   });
 
-  if (!user) throw new Error("User not found");
+  if (!user) throw new Response("User not found");
 
   const { idNote, image } = await req.json();
 
@@ -66,7 +66,7 @@ export async function PUT(req: NextRequest, res: NextResponse) {
   });
 
   if (!note) {
-    throw new Error("Note not found");
+    throw new Response("Note not found");
   }
 
   if (note.image) {
