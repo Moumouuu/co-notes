@@ -3,10 +3,9 @@ import prismadb from "@/lib/prismadb";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
-export async function DELETE(
-  req: NextResponse,
-  context: { params: { noteId: string; userId: string } }
-) {
+export async function DELETE(context: {
+  params: { noteId: string; userId: string };
+}) {
   const session = await getServerSession(authOptions);
   const noteId = context.params.noteId;
 
