@@ -40,7 +40,16 @@ export async function PUT(req: NextRequest, res: NextResponse) {
 
   if (!session?.user?.email) return;
 
-  const { idNote, content, title } = await req.json();
+  const { idNote, content, title, published } = await req.json();
+
+  const oldNote = await prismadb.note.findUnique({
+    where: {
+      id: idNote,
+    },
+    select: {
+      published: true,
+    },
+  });
 
   const updatedNote = await prismadb.note.update({
     where: {
@@ -49,6 +58,7 @@ export async function PUT(req: NextRequest, res: NextResponse) {
     data: {
       content: JSON.stringify(content),
       title,
+      published: !oldNote?.published,
     },
   });
 

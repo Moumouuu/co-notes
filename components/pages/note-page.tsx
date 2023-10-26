@@ -58,7 +58,7 @@ export default function NotePage({ note }: { note: Note }) {
 
     // Si le contenu n'a pas changé, on ne fait rien
     if (isSaved) return;
-
+    // ! bug : des fois le contenue est reset
     // todo : replace try catch with custom fetch hooks
     try {
       setIsLoading(true);
@@ -96,7 +96,7 @@ export default function NotePage({ note }: { note: Note }) {
 
   return (
     <div className="w-full h-screen overflow-y-scroll pt-12 md:pt-5">
-      <div className="z-40 flex w-full md:w-[80%] items-center justify-between fixed top-0 backdrop-blur-sm py-5 px-10 pt-12 md:pt-5">
+      <div className="z-40 flex w-full md:w-[80%] items-center justify-between fixed top-0 backdrop-blur-sm py-5 px-10 pt-14 md:pt-5">
         <div className="flex items-center">
           <h1
             ref={title}
@@ -108,7 +108,7 @@ export default function NotePage({ note }: { note: Note }) {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger onClick={saveContent}>
-                {isLoading ? <BiLoader size={30}/> : <BiSave size={30} />}
+                {isLoading ? <BiLoader size={30} /> : <BiSave size={30} />}
               </TooltipTrigger>
               <TooltipContent>
                 <p>Enregistré la note manuellement</p>
@@ -123,7 +123,7 @@ export default function NotePage({ note }: { note: Note }) {
         <NavNoteButtons note={note} />
       </div>
       <BlockNoteView
-        className="mt-20"
+        className="mt-28 md:mt-20"
         editor={editor}
         theme={resolvedTheme === "light" ? "light" : customDarkTheme}
       />

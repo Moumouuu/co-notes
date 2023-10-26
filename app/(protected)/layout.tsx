@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { redirect } from "next/navigation";
 const inter = Inter({ subsets: ["latin"] });
+import { Toaster } from "@/components/ui/toaster"
 
 export const metadata: Metadata = {
   title: "Co-Notes - Collaborative Notes for Teams and Individuals",
@@ -26,6 +27,7 @@ export default async function RootLayout({
         <main className="flex">
           <AsideMenu currentUser={user} />
           {children}
+          <Toaster />
         </main>
       </body>
     </html>
