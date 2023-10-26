@@ -8,15 +8,16 @@ interface Props {
   note: Note & {
     users: User[];
   };
+  isOwner: boolean;
 }
-export default function NavNoteButtons({ note }: Props) {
+export default function NavNoteButtons({ note, isOwner }: Props) {
   return (
     <div className="flex items-center">
       <div className="mx-2">
-        <InvitationDialog note={note} />
+        <InvitationDialog note={note} isOwner={isOwner} />
       </div>
       <div className="mx-2">
-        <DropdownOptionsNote note={note} />
+        <DropdownOptionsNote note={note} isOwner={isOwner} />
       </div>
     </div>
   );

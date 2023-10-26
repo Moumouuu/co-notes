@@ -30,12 +30,16 @@ interface NoteWithUsers {
   note: Note & {
     users: User[];
   };
+  isOwner: boolean;
 }
 
-export default function InvitationDialog({ note: noteAsProps }: NoteWithUsers) {
+export default function InvitationDialog({
+  note: noteAsProps,
+  isOwner,
+}: NoteWithUsers) {
   const { toast } = useToast();
   const [note, setNote] = useState(noteAsProps);
-  const invitationLink: string = `${process.env.NEXT_PUBLIC_APP_URL}/app/note/invite/${note.linkInvitation}`;
+  const invitationLink: string = `${process.env.NEXT_PUBLIC_APP_URL}/app/note/${note.id}/invite/${note.linkInvitation}`;
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(invitationLink);
@@ -116,7 +120,7 @@ export default function InvitationDialog({ note: noteAsProps }: NoteWithUsers) {
                     <span>{user.name ?? user.email.split("@")[0]}</span>
                     <div className="flex items-center">
                       <Select
-                        disabled={user.id === note.userId}
+                        disabled={user.id === note.userId || !isOwner}
                         onValueChange={(e) => updateRight(e, user.id)}
                         defaultValue={
                           user.userRightNote.filter(
@@ -144,7 +148,7 @@ export default function InvitationDialog({ note: noteAsProps }: NoteWithUsers) {
                       </Select>
 
                       <Button
-                        disabled={user.id === note.userId}
+                        disabled={user.id === note.userId || !isOwner}
                         variant={"outline"}
                         onClick={() => deleteUser(user.id)}
                         className="flex items-center p-2 ml-3 "

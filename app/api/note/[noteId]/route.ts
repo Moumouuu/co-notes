@@ -38,6 +38,10 @@ export async function DELETE(
     return new Error("Note not found");
   }
 
+  if (user.id !== note.userId) {
+    return new Response("Not authorized");
+  }
+
   await prismadb.note.delete({
     where: {
       id: noteId,

@@ -40,6 +40,10 @@ export async function DELETE(
     return new Error("Note not found");
   }
 
+  if (user.id !== note.userId) {
+    return new Response("Not authorized");
+  }
+
   // remove userId from users array
   const noteUpdated = await prismadb.note.update({
     where: {
@@ -83,7 +87,6 @@ export async function PUT(
   if (!user) {
     return new Error("User not found");
   }
-  
   const resRole = await prismadb.userRightNote.update({
     where: {
       userId_noteId: `${userId}_${noteId}`,

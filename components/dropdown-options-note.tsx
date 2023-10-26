@@ -14,7 +14,13 @@ import { CgMoreO } from "react-icons/cg";
 import { Separator } from "./ui/separator";
 import { Switch } from "./ui/switch";
 
-export default function DropdownOptionsNote({ note }: { note: Note }) {
+export default function DropdownOptionsNote({
+  note,
+  isOwner,
+}: {
+  note: Note;
+  isOwner: boolean;
+}) {
   const router = useRouter();
 
   const handleDeleteNote = async (noteId: string) => {
@@ -44,13 +50,17 @@ export default function DropdownOptionsNote({ note }: { note: Note }) {
         </div>
       </PopoverTrigger>
       <PopoverContent className="flex flex-col">
-        <div
-          onClick={() => handleDeleteNote(note.id)}
-          className="flex items-center hover:bg-primary/10 p-3 cursor-pointer "
-        >
-          <AiFillDelete color={"red"} size={25} />
-          <span className="ml-3 font-semibold">Supprimer la note</span>
-        </div>
+        {isOwner && (
+          <>
+            <div
+              onClick={() => handleDeleteNote(note.id)}
+              className="flex items-center hover:bg-primary/10 p-3 cursor-pointer "
+            >
+              <AiFillDelete color={"red"} size={25} />
+              <span className="ml-3 font-semibold">Supprimer la note</span>
+            </div>
+          </>
+        )}
         <div className="flex items-center hover:bg-primary/10 p-3 cursor-pointer ">
           <BsBorderStyle size={25} />
           <span className="ml-3 font-semibold">Personnalisation</span>
@@ -59,14 +69,18 @@ export default function DropdownOptionsNote({ note }: { note: Note }) {
           <BsFillCloudDownloadFill size={25} />
           <span className="ml-3 font-semibold">Télécharger</span>
         </div>
-        <Separator />
-        <div className="flex items-center hover:bg-primary/10 p-3 cursor-pointer ">
-          <Switch
-            defaultChecked={note.published}
-            onCheckedChange={handlePublishNote}
-          />
-          <span className="ml-3 font-semibold">Template public</span>
-        </div>
+        {isOwner && (
+          <>
+            <Separator />
+            <div className="flex items-center hover:bg-primary/10 p-3 cursor-pointer ">
+              <Switch
+                defaultChecked={note.published}
+                onCheckedChange={handlePublishNote}
+              />
+              <span className="ml-3 font-semibold">Template public</span>
+            </div>
+          </>
+        )}
       </PopoverContent>
     </Popover>
   );

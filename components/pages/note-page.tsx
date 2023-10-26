@@ -54,7 +54,6 @@ export default function NotePage({ note, currentUser }: Props) {
     (u) => u.id === currentUser.id
   ) as UserWithRights;
 
-  
   const canEdit =
     currentUserRights &&
     currentUserRights.userRightNote.find(
@@ -63,7 +62,8 @@ export default function NotePage({ note, currentUser }: Props) {
       ? false
       : true;
 
-  console.log(canEdit);
+  const isOwner = currentUser.id === note.userId;
+
   const editor: BlockNoteEditor = useBlockNote({
     editable: canEdit,
     initialContent: note.content
@@ -144,7 +144,7 @@ export default function NotePage({ note, currentUser }: Props) {
           </TooltipProvider>
         </div>
 
-        <NavNoteButtons note={note} />
+        <NavNoteButtons note={note} isOwner={isOwner} />
       </div>
       <BlockNoteView
         className="mt-28 md:mt-20"
