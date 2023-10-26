@@ -3,9 +3,12 @@ import prismadb from "@/lib/prismadb";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
-export async function POST(req: NextResponse) {
+export async function DELETE(
+  req: NextResponse,
+  context: { params: { noteId: string; userId: string } }
+) {
   const session = await getServerSession(authOptions);
-  const { noteId } = await req.json();
+  const noteId = context.params.noteId;
 
   if (!session || !noteId) {
     return new Error("No session or noteId");

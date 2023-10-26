@@ -18,9 +18,7 @@ export default function DropdownOptionsNote({ note }: { note: Note }) {
   const router = useRouter();
 
   const handleDeleteNote = async (noteId: string) => {
-    const res = await axios.post(`/api/note/delete`, {
-      noteId,
-    });
+    const res = await axios.delete(`/api/note/${note.id}`);
     if (res.data.success) {
       router.replace("/app");
     }

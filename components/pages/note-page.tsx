@@ -9,14 +9,20 @@ import { customDarkTheme } from "@/lib/block-note";
 import { Block, BlockNoteEditor } from "@blocknote/core";
 import "@blocknote/core/style.css";
 import { BlockNoteView, useBlockNote } from "@blocknote/react";
-import { Note } from "@prisma/client";
+import { Note, User } from "@prisma/client";
 import axios from "axios";
 import { useTheme } from "next-themes";
 import { useEffect, useRef, useState } from "react";
 import { BiLoader, BiSave } from "react-icons/bi";
 import NavNoteButtons from "../nav-note-buttons";
 
-export default function NotePage({ note }: { note: Note }) {
+interface Props {
+  note: Note & {
+    users: User[];
+  };
+}
+
+export default function NotePage({ note }: Props) {
   /*const generateScreenshot = async () => {
     try {
       const res = await axios.post("/api/note/screenshot", {
