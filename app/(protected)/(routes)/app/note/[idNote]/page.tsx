@@ -11,11 +11,15 @@ export default async function page({ params }: { params: { idNote: string } }) {
       id: idNote,
     },
     include: {
-      users: true,
+      users: {
+        include: {
+          userRightNote: true,
+        },
+      },
     },
   });
 
-  if (!note) {
+  if (!note || !user) {
     return (
       <>
         <h1>Not found</h1>
@@ -28,5 +32,5 @@ export default async function page({ params }: { params: { idNote: string } }) {
     return redirect("/app");
   }
 
-  return <NotePage note={note} />;
+  return <NotePage note={note} currentUser={user} />;
 }

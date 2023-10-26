@@ -8,16 +8,23 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
 import { Note, User } from "@prisma/client";
 import axios from "axios";
+import { useState } from "react";
 import { AiFillDelete } from "react-icons/ai";
 import { FiShare } from "react-icons/fi";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
-import { useState } from "react";
 
 interface NoteWithUsers {
   note: Note & {
@@ -25,9 +32,9 @@ interface NoteWithUsers {
   };
 }
 
-export default function InvitationDialog({ note : noteAsProps }: NoteWithUsers) {
+export default function InvitationDialog({ note: noteAsProps }: NoteWithUsers) {
   const { toast } = useToast();
-  const [note, setNote] = useState(noteAsProps)
+  const [note, setNote] = useState(noteAsProps);
   const invitationLink: string = `${process.env.NEXT_PUBLIC_APP_URL}/app/note/invite/${note.linkInvitation}`;
 
   const copyToClipboard = () => {
@@ -52,6 +59,20 @@ export default function InvitationDialog({ note : noteAsProps }: NoteWithUsers) 
       });
     } catch (e) {
       console.log(`Error deleting user ${userId}`);
+    }
+  };
+
+  const updateRight = async (e: any, userId: string) => {
+    try {
+      await axios.put(`/api/note/${note.id}/user/${userId}`, {
+        role: e,
+      });
+      toast({
+        title: "Droits mis à jour",
+        description: "Les droits de l'utilisateur ont été mis à jour.",
+      });
+    } catch (err) {
+      console.log(`Error updating user ${err}`);
     }
   };
 
@@ -85,16 +106,41 @@ export default function InvitationDialog({ note : noteAsProps }: NoteWithUsers) 
             <div className="flex flex-col">
               <span>Vos collabotateurs</span>
               <ScrollArea className="flex flex-col h-[250px] w-full rounded-md">
-                {note.users.map((user:User) => (
+                {note.users.map((user: any) => (
                   <div
                     key={user.id}
                     className="px-3 py-1 my-2 border rounded-md w-full flex items-center justify-between"
                   >
                     <span>{user.name ?? user.email.split("@")[0]}</span>
                     <div className="flex items-center">
-                      <div className="flex items-center cursor-pointer p-2 border rounded-md">
-                        <span>Rôles</span>
-                      </div>
+                      <Select
+                        disabled={user.id === note.userId}
+                        onValueChange={(e) => updateRight(e, user.id)}
+                        defaultValue={
+                          user.userRightNote.filter(
+                            (u: any) => u.noteId === note.id
+                          )[0].role
+                        }
+                      >
+                        <SelectTrigger className="w-[120px]">
+                          <SelectValue
+                            placeholder={
+                              user.userRightNote.filter(
+                                (u: any) => u.noteId === note.id
+                              )[0].role === "USER"
+                                ? "Lecture"
+                                : "Lecture / Écriture"
+                            }
+                          />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="USER">Lecture</SelectItem>
+                          <SelectItem value="ADMIN">
+                            Lecture / Écriture
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+
                       <Button
                         disabled={user.id === note.userId}
                         variant={"outline"}

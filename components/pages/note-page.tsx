@@ -9,7 +9,7 @@ import { customDarkTheme } from "@/lib/block-note";
 import { Block, BlockNoteEditor } from "@blocknote/core";
 import "@blocknote/core/style.css";
 import { BlockNoteView, useBlockNote } from "@blocknote/react";
-import { Note, User } from "@prisma/client";
+import { Note, User, UserRightNote } from "@prisma/client";
 import axios from "axios";
 import { useTheme } from "next-themes";
 import { useEffect, useRef, useState } from "react";
@@ -20,9 +20,14 @@ interface Props {
   note: Note & {
     users: User[];
   };
+  currentUser: User;
 }
 
-export default function NotePage({ note }: Props) {
+interface UserWithRights extends User {
+  userRightNote: UserRightNote[];
+}
+
+export default function NotePage({ note, currentUser }: Props) {
   /*const generateScreenshot = async () => {
     try {
       const res = await axios.post("/api/note/screenshot", {
@@ -45,8 +50,21 @@ export default function NotePage({ note }: Props) {
   const { resolvedTheme } = useTheme();
   const title = useRef<HTMLHeadingElement | null>(null);
 
+  const currentUserRights = note.users.find(
+    (u) => u.id === currentUser.id
+  ) as UserWithRights;
+
+  const canEdit =
+    currentUserRights &&
+    currentUserRights.userRightNote.find(
+      (r: UserRightNote) => r.noteId === note.id
+    )?.role === "USER"
+      ? false
+      : true;
+
+  console.log(canEdit);
   const editor: BlockNoteEditor = useBlockNote({
-    editable: true,
+    editable: canEdit,
     initialContent: note.content
       ? (JSON.parse(note.content) as Block[])
       : undefined,
@@ -65,7 +83,6 @@ export default function NotePage({ note }: Props) {
     // Si le contenu n'a pas changé, on ne fait rien
     if (isSaved) return;
     // ! bug : des fois le contenue est reset
-    // todo : replace try catch with custom fetch hooks
     try {
       setIsLoading(true);
       const content: Block[] = editor.topLevelBlocks;

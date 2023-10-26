@@ -30,6 +30,17 @@ export async function POST(req: NextRequest, res: NextResponse) {
     },
   });
 
+  const rightUser = await prismadb.userRightNote.create({
+    data: {
+      userId: user.id,
+      noteId: newNotes.id,
+      role: "ADMIN",
+      userId_noteId: `${user.id}_${newNotes.id}}`,
+    },
+  });
+
+  if (!rightUser) throw new Error("User not found");
+
   return NextResponse.json(newNotes);
 }
 
@@ -51,6 +62,7 @@ export async function PUT(req: NextRequest, res: NextResponse) {
     },
   });
 
+  // todo : check if published is not toggle (in case this route is called from another file not wanted)
   const updatedNote = await prismadb.note.update({
     where: {
       id: idNote,

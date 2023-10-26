@@ -11,31 +11,44 @@ datasource db {
 }
 
 model User {
-  id       String  @id @default(uuid())
-  email    String  @unique
-  name     String?
-  password String?
-  image    String? @default("/public/images/default.png")
+  id            String          @id @default(uuid())
+  email         String          @unique
+  name          String?
+  password      String?
+  image         String?         @default("/public/images/default.png")
   // all of the notes that this user has (with shared notes)
-  notes    Note[]
+  notes         Note[]
   // all likes of the users
-  likes    Like[]
+  likes         Like[]
+  userRightNote UserRightNote[]
 }
 
 model Note {
-  id             String   @id @default(uuid())
+  id             String          @id @default(uuid())
   title          String?
   content        String?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  numberDownload Int      @default(0)
-  published      Boolean  @default(false)
-  linkInvitation String?  @default(uuid())
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  numberDownload Int             @default(0)
+  published      Boolean         @default(false)
+  linkInvitation String?         @default(uuid())
   userId         String
   image          String?
   likes          Like[]
   // all of the users that have access to this note
   users          User[]
+  userRightNote  UserRightNote[]
+}
+
+model UserRightNote {
+  id            String @id @default(uuid())
+  note          Note   @relation(fields: [noteId], references: [id])
+  noteId        String
+  user          User   @relation(fields: [userId], references: [id])
+  userId        String
+  // the role of the user in the note
+  role          Role   @default(USER)
+  userId_noteId String @unique 
 }
 
 model Like {
@@ -58,11 +71,6 @@ model Preference {
 // ENUMS
 enum Role {
   ADMIN
-  USER
-}
-
-enum NoteType {
-  SYSTEM
   USER
 }
 
