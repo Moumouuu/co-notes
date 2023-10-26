@@ -110,7 +110,7 @@ export default function InvitationDialog({
             </div>
 
             <div className="flex flex-col pt-3">
-              <span className="text-lg ">Vos collabotateurs</span>
+              <span className="text-lg ">Vos collaborateurs</span>
               <ScrollArea className="flex flex-col h-[250px] w-full rounded-md">
                 {note.users.map((user: any) => (
                   <div
