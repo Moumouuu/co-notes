@@ -85,13 +85,15 @@ export default function InvitationDialog({ note: noteAsProps }: NoteWithUsers) {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Invitation à la note</DialogTitle>
+          <DialogTitle className="text-xl">Invitation à la note</DialogTitle>
           <DialogDescription>
             Ici vous pouvez inviter des personnes, voir qui est déjà invité et
             gérer les droits d&apos;accès.
           </DialogDescription>
           <Separator />
-          <Label htmlFor="invite">Lien d&apos;invitation</Label>
+          <Label className="text-lg pt-3" htmlFor="invite">
+            Lien d&apos;invitation
+          </Label>
           <div className="flex flex-col">
             <div className={"flex items-center"}>
               <Input id="invite" value={invitationLink} disabled />
@@ -103,8 +105,8 @@ export default function InvitationDialog({ note: noteAsProps }: NoteWithUsers) {
               </div>
             </div>
 
-            <div className="flex flex-col">
-              <span>Vos collabotateurs</span>
+            <div className="flex flex-col pt-3">
+              <span className="text-lg ">Vos collabotateurs</span>
               <ScrollArea className="flex flex-col h-[250px] w-full rounded-md">
                 {note.users.map((user: any) => (
                   <div

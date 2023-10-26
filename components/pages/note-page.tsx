@@ -54,6 +54,7 @@ export default function NotePage({ note, currentUser }: Props) {
     (u) => u.id === currentUser.id
   ) as UserWithRights;
 
+  
   const canEdit =
     currentUserRights &&
     currentUserRights.userRightNote.find(
