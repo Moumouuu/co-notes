@@ -14,6 +14,9 @@ import axios from "axios";
 import { useTheme } from "next-themes";
 import { useEffect, useRef, useState } from "react";
 import { BiLoader, BiSave } from "react-icons/bi";
+// @ts-ignore
+import YPartyKitProvider from "y-partykit/provider";
+import * as Y from "yjs";
 import NavNoteButtons from "../nav-note-buttons";
 
 interface Props {
@@ -64,12 +67,49 @@ export default function NotePage({ note, currentUser }: Props) {
 
   const isOwner = currentUser.id === note.userId;
 
+  const doc = new Y.Doc();
+
+  const provider = new YPartyKitProvider(
+    "blocknote-dev.yousefed.partykit.dev",
+    // use a unique name as a "room" for your application:
+    note.id.toString(),
+    doc
+  );
+
+  const generateRandomColor = () => {
+    const letters = "0123456789ABCDEF";
+    let color = "#";
+    for (let i = 2; i < 8; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  };
+
   const editor: BlockNoteEditor = useBlockNote({
     editable: canEdit,
     initialContent: note.content
       ? (JSON.parse(note.content) as Block[])
       : undefined,
+    collaboration: {
+      // The Yjs Provider responsible for transporting updates:
+      provider,
+      // Where to store BlockNote data in the Y.Doc:
+      fragment: doc.getXmlFragment("document-store"),
+      // Information (name and color) for this user:
+      user: {
+        name: currentUser.name ?? currentUser.email.split("@")[0],
+        color: generateRandomColor(),
+      },
+    },
   });
+
+  // Ajoutez une fonction de nettoyage pour détruire la session WebrtcProvider
+  const cleanup = () => {
+    if (provider) {
+      provider.disconnect(); // Déconnectez la session WebrtcProvider
+      // Nettoyez les autres ressources si nécessaire
+    }
+  };
 
   var lastSavedTopLevelBlocks = note.content ? JSON.parse(note.content) : [];
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -107,6 +147,7 @@ export default function NotePage({ note, currentUser }: Props) {
     // Fonction pour arrêter l'intervalle lorsque le composant est démonté
     return () => {
       clearInterval(interval);
+      cleanup(); // Appelez la fonction de nettoyage lors du démontage du composant
     };
   }, []); // Vide le tableau de dépendances pour que cela s'exécute une seule fois à la création du composant
 
@@ -115,6 +156,7 @@ export default function NotePage({ note, currentUser }: Props) {
 
     return () => {
       window.removeEventListener("beforeunload", saveContent);
+      cleanup(); // Appelez la fonction de nettoyage lors du démontage du composant
     };
   }, []);
 

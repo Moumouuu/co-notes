@@ -44,6 +44,10 @@
     "react-icons": "^4.11.0",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",
+    "y-partykit": "^0.0.0-00bdda2",
+    "y-webrtc": "^10.2.5",
+    "y-websocket": "^1.5.0",
+    "yjs": "^13.6.8",
     "zod": "^3.22.4",
     "zustand": "^4.4.3"
   },
