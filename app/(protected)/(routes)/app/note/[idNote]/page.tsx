@@ -11,6 +11,7 @@ export default async function page({ params }: { params: { idNote: string } }) {
       id: idNote,
     },
     include: {
+      preference: true,
       users: {
         include: {
           userRightNote: true,

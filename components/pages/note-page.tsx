@@ -5,16 +5,15 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { customDarkTheme } from "@/lib/block-note";
+import { customDarkTheme, customLightTheme } from "@/lib/block-note";
 import { Block, BlockNoteEditor } from "@blocknote/core";
 import "@blocknote/core/style.css";
 import { BlockNoteView, useBlockNote } from "@blocknote/react";
-import { Note, User, UserRightNote } from "@prisma/client";
+import { Note, Preference, User, UserRightNote } from "@prisma/client";
 import axios from "axios";
 import { useTheme } from "next-themes";
 import { useEffect, useRef, useState } from "react";
 import { BiLoader, BiSave } from "react-icons/bi";
-// @ts-ignore
 import YPartyKitProvider from "y-partykit/provider";
 import * as Y from "yjs";
 import NavNoteButtons from "../nav-note-buttons";
@@ -22,6 +21,7 @@ import NavNoteButtons from "../nav-note-buttons";
 interface Props {
   note: Note & {
     users: User[];
+    preference: Preference | null;
   };
   currentUser: User;
 }
@@ -46,7 +46,6 @@ export default function NotePage({ note, currentUser }: Props) {
       console.error(`Error while generating screenshot & updating: ${error}`);
     }
   };
-   todo : call 2 times
   generateScreenshot();
   */
 
@@ -103,14 +102,6 @@ export default function NotePage({ note, currentUser }: Props) {
     },
   });
 
-  // Ajoutez une fonction de nettoyage pour détruire la session WebrtcProvider
-  const cleanup = () => {
-    if (provider) {
-      provider.disconnect(); // Déconnectez la session WebrtcProvider
-      // Nettoyez les autres ressources si nécessaire
-    }
-  };
-
   var lastSavedTopLevelBlocks = note.content ? JSON.parse(note.content) : [];
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -147,7 +138,6 @@ export default function NotePage({ note, currentUser }: Props) {
     // Fonction pour arrêter l'intervalle lorsque le composant est démonté
     return () => {
       clearInterval(interval);
-      cleanup(); // Appelez la fonction de nettoyage lors du démontage du composant
     };
   }, []); // Vide le tableau de dépendances pour que cela s'exécute une seule fois à la création du composant
 
@@ -156,12 +146,13 @@ export default function NotePage({ note, currentUser }: Props) {
 
     return () => {
       window.removeEventListener("beforeunload", saveContent);
-      cleanup(); // Appelez la fonction de nettoyage lors du démontage du composant
     };
   }, []);
 
+  //todo : color background for note
+  //const colorBg = `bg-[${note.preference?.colorBg}]`;
   return (
-    <div className="w-full h-screen overflow-y-scroll pt-12 md:pt-5">
+    <div className={`w-full h-screen overflow-y-scroll pt-12 md:pt-5`}>
       <div className="z-40 flex w-full md:w-[80%] items-center justify-between fixed top-0 backdrop-blur-sm py-5 px-10 pt-14 md:pt-5">
         <div className="flex items-center">
           <h1
@@ -189,9 +180,9 @@ export default function NotePage({ note, currentUser }: Props) {
         <NavNoteButtons note={note} isOwner={isOwner} />
       </div>
       <BlockNoteView
-        className="mt-28 md:mt-20"
+        className=" mt-28 md:mt-20"
         editor={editor}
-        theme={resolvedTheme === "light" ? "light" : customDarkTheme}
+        theme={resolvedTheme === "light" ? customLightTheme : customDarkTheme}
       />
     </div>
   );

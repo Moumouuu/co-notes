@@ -1,12 +1,13 @@
 "use client";
 
-import { Note, User } from "@prisma/client";
+import { Note, Preference, User } from "@prisma/client";
 import InvitationDialog from "./dialog/invitation-dialog";
 import DropdownOptionsNote from "./dropdown-options-note";
 
 interface Props {
   note: Note & {
     users: User[];
+    preference: Preference | null;
   };
   isOwner: boolean;
 }

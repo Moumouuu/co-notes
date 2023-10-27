@@ -38,6 +38,8 @@ model Note {
   // all of the users that have access to this note
   users          User[]
   userRightNote  UserRightNote[]
+
+  preference Preference?
 }
 
 model UserRightNote {
@@ -48,7 +50,7 @@ model UserRightNote {
   userId        String
   // the role of the user in the note
   role          Role   @default(USER)
-  userId_noteId String @unique 
+  userId_noteId String @unique
 }
 
 model Like {
@@ -60,12 +62,12 @@ model Like {
 }
 
 model Preference {
-  id        String  @id @default(uuid())
-  colorText String  @default("#000000")
-  colorBg   String  @default("#ffffff")
-  imageBg   String?
-  font      String  @default("Arial")
-  autoSave  Boolean @default(true)
+  id      String  @id @default(uuid())
+  colorBg String?
+  font    String?
+  // one note has one preference (one to one)
+  note    Note    @relation(fields: [noteId], references: [id])
+  noteId  String  @unique
 }
 
 // ENUMS
@@ -75,13 +77,13 @@ enum Role {
 }
 
 enum Font {
-  TIMES_NEW_ROMAN
-  ARIAL
-  COURIER_NEW
-  GEORGIA
-  VERDANA
-  TAHOMA
-  TREBUCHET_MS
-  IMPACT
-  LUCIDA_SANS_UNICODE
+  LUXURIOUS_ROMAN
+  NOTO_SANS_GEORGIAN
+  VARELA_ROUND
+  ASAP
+  IMPERIAL_SCRIPT
+  TROCHUT
+  ABEL
+  ACME
+  GEOSTAR
 }

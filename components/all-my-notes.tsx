@@ -1,9 +1,9 @@
 "use client";
 
+import newNote from "@/actions/new-note";
 import Note from "@/components/note";
 import { Button } from "@/components/ui/button";
 import type { Like, Note as NoteType, User } from "@prisma/client";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -47,10 +47,9 @@ export default function AllMyNotes({
             Vous n&apos;avez pas de notes !
           </h2>
           <p className="my-2">Créez votre première note ! 🎉</p>
-          <Link href={"/app/note"}>
-            {/* todo : add create note */}
-            <Button variant={"purple"}>Essaie pour voir...</Button>
-          </Link>
+          <Button onClick={newNote} variant={"purple"}>
+            Essaie pour voir...
+          </Button>
         </div>
       )}
 

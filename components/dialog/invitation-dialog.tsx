@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
-import { Note, User } from "@prisma/client";
+import { Note, Preference, User } from "@prisma/client";
 import axios from "axios";
 import { useState } from "react";
 import { AiFillDelete } from "react-icons/ai";
@@ -29,6 +29,7 @@ import { Separator } from "../ui/separator";
 interface NoteWithUsers {
   note: Note & {
     users: User[];
+    preference: Preference | null;
   };
   isOwner: boolean;
 }

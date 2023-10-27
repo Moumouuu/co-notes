@@ -22,6 +22,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
     data: {
       title: "Untitled Note",
       userId: user.id,
+      preference: {
+        create: {},
+      },
       users: {
         connect: {
           id: user.id,
@@ -53,16 +56,6 @@ export async function PUT(req: NextRequest, res: NextResponse) {
 
   const { idNote, content, title, published } = await req.json();
 
-  const oldNote = await prismadb.note.findUnique({
-    where: {
-      id: idNote,
-    },
-    select: {
-      published: true,
-    },
-  });
-
-  // todo : check if published is not toggle (in case this route is called from another file not wanted)
   const updatedNote = await prismadb.note.update({
     where: {
       id: idNote,
@@ -70,7 +63,7 @@ export async function PUT(req: NextRequest, res: NextResponse) {
     data: {
       content: JSON.stringify(content),
       title,
-      published: !oldNote?.published,
+      published: published,
     },
   });
 

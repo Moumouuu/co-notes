@@ -44,6 +44,19 @@ export async function DELETE(
     return new Response("Not authorized");
   }
 
+  //delete all rights
+  await prismadb.userRightNote.deleteMany({
+    where: {
+      noteId: noteId,
+    },
+  });
+  // delete all preferences
+  await prismadb.preference.deleteMany({
+    where: {
+      noteId: noteId,
+    },
+  });
+  // delete notes
   await prismadb.note.delete({
     where: {
       id: noteId,

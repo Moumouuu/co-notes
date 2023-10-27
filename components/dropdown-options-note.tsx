@@ -5,22 +5,25 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-import { Note } from "@prisma/client";
+import { Note, Preference, User } from "@prisma/client";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { AiFillDelete } from "react-icons/ai";
-import { BsBorderStyle, BsFillCloudDownloadFill } from "react-icons/bs";
+import { BsFillCloudDownloadFill } from "react-icons/bs";
 import { CgMoreO } from "react-icons/cg";
+import PersonalizationDialog from "./dialog/personalization-dialog";
 import { Separator } from "./ui/separator";
 import { Switch } from "./ui/switch";
 
-export default function DropdownOptionsNote({
-  note,
-  isOwner,
-}: {
-  note: Note;
+interface NoteWithUsers {
+  note: Note & {
+    users: User[];
+    preference: Preference | null;
+  };
   isOwner: boolean;
-}) {
+}
+
+export default function DropdownOptionsNote({ note, isOwner }: NoteWithUsers) {
   const router = useRouter();
 
   const handleDeleteNote = async (noteId: string) => {
@@ -30,7 +33,6 @@ export default function DropdownOptionsNote({
     }
   };
   const handleDownloadNote = async () => {};
-  const handleCustomizeNote = async () => {};
   const handlePublishNote = async () => {
     try {
       await axios.put(`/api/note`, {
@@ -61,10 +63,7 @@ export default function DropdownOptionsNote({
             </div>
           </>
         )}
-        <div className="flex items-center hover:bg-primary/10 p-3 cursor-pointer ">
-          <BsBorderStyle size={25} />
-          <span className="ml-3 font-semibold">Personnalisation</span>
-        </div>
+        <PersonalizationDialog note={note} />
         <div className="flex items-center hover:bg-primary/10 p-3 cursor-pointer ">
           <BsFillCloudDownloadFill size={25} />
           <span className="ml-3 font-semibold">Télécharger</span>
