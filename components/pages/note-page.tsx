@@ -5,7 +5,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { customDarkTheme, customLightTheme } from "@/lib/block-note";
+import { customDarkTheme, customLightTheme, theme } from "@/lib/block-note";
 import { Block, BlockNoteEditor } from "@blocknote/core";
 import "@blocknote/core/style.css";
 import { BlockNoteView, useBlockNote } from "@blocknote/react";
@@ -150,7 +150,7 @@ export default function NotePage({ note, currentUser }: Props) {
   }, []);
 
   //todo : color background for note
-  //const colorBg = `bg-[${note.preference?.colorBg}]`;
+  console.log(note.preference?.colorBg)
   return (
     <div className={`w-full h-screen overflow-y-scroll pt-12 md:pt-5`}>
       <div className="z-40 flex w-full md:w-[80%] items-center justify-between fixed top-0 backdrop-blur-sm py-5 px-10 pt-14 md:pt-5">
@@ -182,7 +182,7 @@ export default function NotePage({ note, currentUser }: Props) {
       <BlockNoteView
         className=" mt-28 md:mt-20"
         editor={editor}
-        theme={resolvedTheme === "light" ? customLightTheme : customDarkTheme}
+        theme={resolvedTheme === "light" ? customLightTheme : theme}
       />
     </div>
   );

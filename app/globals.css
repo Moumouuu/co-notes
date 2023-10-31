@@ -1,7 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
+@import url('https://fonts.cdnfonts.com/css/oserif');
+
 @layer base {
   :root {
     --background: 0 0% 100%;

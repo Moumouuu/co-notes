@@ -38,6 +38,7 @@ export const customDarkTheme = {
 export const customLightTheme = {
   // @ts-ignore
   type: "light",
+
   colors: {
     editor: {
       text: "#000",
@@ -71,3 +72,32 @@ export const customLightTheme = {
   borderRadius: 4,
   fontFamily: "Helvetica Neue, sans-serif",
 } satisfies Theme;
+
+export const themeTest = (theme: any) => ({
+  ...customDarkTheme,
+  Editor: {
+    '[data-node-type="blockContainer"] *': {
+      fontFamily: "Comic Sans MS",
+    },
+    backgroundColor: theme.colors.editor.background,
+      borderRadius: theme.borderRadius,
+      border: `1px solid ${theme.colors.border}`,
+      boxShadow: `0 4px 12px ${theme.colors.shadow}`,
+  },
+});
+
+export const theme = {
+  ...customDarkTheme,
+  componentStyles: (theme:any) => ({
+    // Adds basic styling to the editor.
+    Editor: {
+      '[data-node-type="blockContainer"] *': {
+        fontFamily: 'OSerif',
+      },
+      backgroundColor: theme.colors.editor.background,
+      borderRadius: theme.borderRadius,
+      border: `1px solid ${theme.colors.border}`,
+      boxShadow: `0 4px 12px ${theme.colors.shadow}`,
+    },
+  }),
+};

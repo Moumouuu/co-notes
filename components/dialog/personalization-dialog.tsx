@@ -37,6 +37,7 @@ interface NoteWithUsers {
 
 export default function PersonalizationDialog({ note }: NoteWithUsers) {
   // todo ; font doesn't work
+  // todo : color doesn't work
   const { toast } = useToast();
 
   const [color, setColor] = useState<string>(
