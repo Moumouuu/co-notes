@@ -75,16 +75,17 @@ Use this space to show useful examples of how a project can be used. Additional 
 
 - [ ] Windows pages
 - [ ] Note
-  - [ ] Create
-  - [ ] Sharing (read only)
-  - [ ] Consulting 
-  - [ ] Deleting
+  - [X] Create
+  - [X] Sharing (read only)
+  - [X] Consulting 
+  - [X] Deleting
   - [ ] Personalize (color,background)
-  - [ ] Roles (read, edit,admin)
-- [ ] Implement realtime editing with collaborator
-- [ ] Inviting for collaboration
+  - [X] Roles (read, edit,admin)
+- [X] Implement realtime editing with collaborator
+- [X] Inviting for collaboration
 - [ ] Organize note (category)
 - [ ] Exporting notes as pdf
+- [ ] Templating
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
