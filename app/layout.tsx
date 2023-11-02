@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import { Inter } from "next/font/google";
 import AuthContext from "./context/auth-context";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/react";
 
 import { ThemeProvider } from "@/components/theme-provider";
 
@@ -31,7 +32,10 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <AuthContext session={session}>{children}</AuthContext>
+          <AuthContext session={session}>
+            {children}
+            <Analytics />
+          </AuthContext>
         </ThemeProvider>
       </body>
     </html>
