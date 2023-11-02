@@ -4,8 +4,10 @@ import { cn } from "@/lib/utils";
 import type { Note, User } from "@prisma/client";
 import axios from "axios";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { AiFillHeart, AiOutlineDownload, AiOutlineHeart } from "react-icons/ai";
+import { Button } from "./ui/button";
 
 interface NoteProps {
   currentUser: User;
@@ -27,6 +29,10 @@ export default function Note({ note, currentUser }: NoteProps) {
   const [isLiked, setIsLiked] = useState(userLiked || false);
   const [numberOfLikes, setNumberOfLikes] = useState(note._count.likes || 0);
 
+  const router = useRouter();
+  const path = usePathname();
+  const isTemplatePage = path === "/app/templates";
+
   const handleLike = async (noteId: string) => {
     try {
       await axios.post("/api/note/like", { noteId });
@@ -38,8 +44,24 @@ export default function Note({ note, currentUser }: NoteProps) {
   };
 
   const handleTemplate = async (note: Note) => {
-    // todo : add take template button to note (if published && not mine)
-    // todo : on page /app/template show button to take template
+    try {
+      // increment numberDownload
+      await axios.put("/api/note", {
+        idNote: note.id,
+        numberDownload : note.numberDownload + 1
+      })
+      // create new note with content
+      const newNote = await axios.post("/api/note", {
+        title: "Copie de " + note.title,
+        content : note.content
+      })
+      console.log(newNote)
+      // todo : redirect crash app and content is a string not an object
+      // redirect to new note
+      router.push(`/app/note/${newNote.data.id}`)
+    }catch(e){
+      console.log(`Error while updating note ${note.id}: ${e} or creating new note with content`);
+    }
   };
 
   return (
@@ -62,6 +84,13 @@ export default function Note({ note, currentUser }: NoteProps) {
             <AiOutlineDownload className="mr-2" color={"black"} />
             <p className="text-black">{note.numberDownload}</p>
           </div>
+
+          {isTemplatePage && (
+            <Button onClick={() => handleTemplate(note)} variant={"purple"}>
+              Prendre la template
+            </Button>
+          )}
+
           <div
             className="flex flex-row items-center cursor-pointer"
             onClick={() => handleLike(note.id)}
