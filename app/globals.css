@@ -1,7 +1,47 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://fonts.cdnfonts.com/css/oserif');
+@import url('https://fonts.cdnfonts.com/css/lets-coffee');
+
+@font-face {
+  font-family: "Pixel";
+  src: url('/fonts/Pixel.ttf');
+}
+
+@font-face {
+  font-family: "Cholten";
+  src: url('/fonts/Cholten.otf');
+}
+
+@font-face {
+  font-family: "NaturalPrecision";
+  src: url('/fonts/NaturalPrecision.ttf');
+}
+
+@font-face {
+  font-family: "Oserif";
+  src: url('/fonts/Oserif.ttf');
+}
+
+@font-face {
+  font-family: "Reiswar";
+  src: url('/fonts/reiswar.ttf');
+}
+
+@font-face {
+  font-family: "RokunaAlenthush";
+  src: url('/fonts/RokunaAlenthush.otf');
+}
+
+@font-face {
+  font-family: "RukishytrialRegular";
+  src: url('/fonts/RukishytrialRegular.otf');
+}
+
+@font-face {
+  font-family: "SnowyChrista";
+  src: url('/fonts/Snowy-Christa.otf');
+}
 
 @layer base {
   :root {

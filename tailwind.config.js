@@ -8,6 +8,16 @@ module.exports = {
     './src/**/*.{ts,tsx}',
 	],
   theme: {
+    fontFamily:{
+      Pixel : ["Pixel"],
+      Cholten : ["Cholten"],
+      NaturalPrecision : ["NaturalPrecision"],
+      Oserif : ["Oserif"],
+      Reiswar : ["Reiswar"],
+      RokunaAlenthush : ["RokunaAlenthush"],
+      RukishytrialRegular : ["RukishytrialRegular"],
+      SnowyChrista : ["SnowyChrista"],
+    },
     container: {
       center: true,
       padding: "2rem",

@@ -5,18 +5,23 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { customDarkTheme, customLightTheme, theme } from "@/lib/block-note";
 import { Block, BlockNoteEditor } from "@blocknote/core";
 import "@blocknote/core/style.css";
-import { BlockNoteView, useBlockNote } from "@blocknote/react";
+import {
+  BlockNoteView,
+  Theme,
+  lightDefaultTheme,
+  useBlockNote,
+} from "@blocknote/react";
 import { Note, Preference, User, UserRightNote } from "@prisma/client";
 import axios from "axios";
-import { useTheme } from "next-themes";
 import { useEffect, useRef, useState } from "react";
 import { BiLoader, BiSave } from "react-icons/bi";
 import YPartyKitProvider from "y-partykit/provider";
 import * as Y from "yjs";
 import NavNoteButtons from "../nav-note-buttons";
+import { fonts } from "@/lib/font";
+import { cn } from "@/lib/utils";
 
 interface Props {
   note: Note & {
@@ -49,8 +54,12 @@ export default function NotePage({ note, currentUser }: Props) {
   generateScreenshot();
   */
 
-  const { resolvedTheme } = useTheme();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const title = useRef<HTMLHeadingElement | null>(null);
+  const selectedFont = fonts.find(
+    (font) => font.name === note.preference?.font
+  )?.name;
+  var lastSavedTopLevelBlocks = note.content ? JSON.parse(note.content) : [];
 
   const currentUserRights = note.users.find(
     (u) => u.id === currentUser.id
@@ -102,9 +111,6 @@ export default function NotePage({ note, currentUser }: Props) {
     },
   });
 
-  var lastSavedTopLevelBlocks = note.content ? JSON.parse(note.content) : [];
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
   const saveContent = async () => {
     const isSaved =
       JSON.stringify(lastSavedTopLevelBlocks) ===
@@ -114,7 +120,6 @@ export default function NotePage({ note, currentUser }: Props) {
 
     // Si le contenu n'a pas changé, on ne fait rien
     if (isSaved) return;
-    // ! bug : des fois le contenue est reset
     try {
       setIsLoading(true);
       const content: Block[] = editor.topLevelBlocks;
@@ -149,15 +154,114 @@ export default function NotePage({ note, currentUser }: Props) {
     };
   }, []);
 
-  //todo : color background for note
-  console.log(note.preference?.colorBg)
+  const customDarkTheme = {
+    // @ts-ignore
+    type: "dark",
+    colors: {
+      editor: {
+        text: "#ffffff",
+        background: "#020817",
+      },
+      menu: {
+        text: "#ffffff",
+        background: "#020817",
+      },
+      tooltip: {
+        text: "#ffffff",
+        background: "#020817",
+      },
+      hovered: {
+        text: "#ffffff",
+        background: "#280032",
+      },
+      selected: {
+        text: "#ffffff",
+        background: "#020817",
+      },
+      disabled: {
+        text: "#9b0000",
+        background: "#020817",
+      },
+      shadow: "#280032",
+      border: "#280032",
+      sideMenu: "#fff",
+      highlightColors: lightDefaultTheme.colors.highlightColors,
+    },
+    borderRadius: 4,
+    fontFamily: "Helvetica Neue, sans-serif",
+  } satisfies Theme;
+
+  const customLightTheme = {
+    // @ts-ignore
+    type: "light",
+
+    colors: {
+      editor: {
+        text: "#000",
+        background: "#fff",
+      },
+      menu: {
+        text: "#000",
+        background: "#fff",
+      },
+      tooltip: {
+        text: "#000",
+        background: "#fff",
+      },
+      hovered: {
+        text: "#000",
+        background: "#B3B3B3",
+      },
+      selected: {
+        text: "#000",
+        background: "#fff",
+      },
+      disabled: {
+        text: "#9b0000",
+        background: "#fff",
+      },
+      shadow: "#B3B3B3",
+      border: "#B3B3B3",
+      sideMenu: "#000",
+      highlightColors: lightDefaultTheme.colors.highlightColors,
+    },
+    borderRadius: 4,
+    fontFamily: "Helvetica Neue, sans-serif",
+  } satisfies Theme;
+
+  const componentStyles = (theme: Theme) => ({
+    Editor: {
+      '[data-node-type="blockContainer"] *': {
+        fontFamily: note.preference?.font ?? theme.fontFamily,
+      },
+    },
+  });
+
+  // Default dark theme with additional component styles.
+  const theme = {
+    light: {
+      ...customLightTheme,
+      componentStyles,
+    },
+    dark: {
+      ...customDarkTheme,
+      componentStyles,
+    },
+  } satisfies {
+    light: Theme;
+    dark: Theme;
+  };
+
   return (
     <div className={`w-full h-screen overflow-y-scroll pt-12 md:pt-5`}>
       <div className="z-40 flex w-full md:w-[80%] items-center justify-between fixed top-0 backdrop-blur-sm py-5 px-10 pt-14 md:pt-5">
         <div className="flex items-center">
           <h1
             ref={title}
-            className="text-3xl md:text-4xl font-bold mr-3"
+            className={cn(
+              `font-${selectedFont}`,
+              "text-3xl md:text-4xl font-bold mr-3"
+            )}
             contentEditable
           >
             {note.title}
@@ -176,13 +280,12 @@ export default function NotePage({ note, currentUser }: Props) {
             </Tooltip>
           </TooltipProvider>
         </div>
-
         <NavNoteButtons note={note} isOwner={isOwner} />
       </div>
       <BlockNoteView
         className=" mt-28 md:mt-20"
         editor={editor}
-        theme={resolvedTheme === "light" ? customLightTheme : theme}
+        theme={theme}
       />
     </div>
   );

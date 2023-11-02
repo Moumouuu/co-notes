@@ -36,7 +36,6 @@ interface NoteWithUsers {
 }
 
 export default function PersonalizationDialog({ note }: NoteWithUsers) {
-  // todo ; font doesn't work
   // todo : color doesn't work
   const { toast } = useToast();
 
@@ -47,8 +46,11 @@ export default function PersonalizationDialog({ note }: NoteWithUsers) {
     note.preference?.font ?? ""
   );
 
+  const selectedFont = fonts.find(
+    (font) => font.name === note.preference?.font
+  )?.name;
+
   const onSubmit = async () => {
-    console.log(color, fontFamily);
     try {
       await axios.put(`/api/note/${note.id}/preference`, {
         colorBg: color,
@@ -63,6 +65,7 @@ export default function PersonalizationDialog({ note }: NoteWithUsers) {
       console.log(`Error during update note (font, color) : ${e}`);
     }
   };
+
   return (
     <Dialog>
       <DialogTrigger>
@@ -95,23 +98,41 @@ export default function PersonalizationDialog({ note }: NoteWithUsers) {
           </Label>
 
           <Select onValueChange={(e: any) => setFontFamily(e)}>
-            <SelectTrigger
-              className={cn(
-                fonts.find((font) => font.name === note.preference?.font)?.font
-                  .className,
-                "w-[180px]"
-              )}
-            >
+            <SelectTrigger className={cn(`font-${selectedFont}`, "w-[180px]")}>
               <SelectValue
                 placeholder={note.preference?.font ? "Bonjour !" : "Police"}
               />
             </SelectTrigger>
+            {/* Cannot map because tailwind canno't take css with variable*/}
             <SelectContent>
-              {fonts.map((f) => (
-                <SelectItem key={f.id} value={f.name}>
-                  <span className={f.font.className}>Bonjour !</span>
-                </SelectItem>
-              ))}
+              <SelectItem value={"Pixel"}>
+                <span className={`font-Pixel`}>Bonjour !</span>
+              </SelectItem>
+
+              <SelectItem value="Cholten">
+                <span className={`font-Cholten`}>Bonjour !</span>
+              </SelectItem>
+
+              <SelectItem value="NaturalPrecision">
+                <span className={`font-NaturalPrecision`}>Bonjour !</span>
+              </SelectItem>
+
+              <SelectItem value="Oserif">
+                <span className={`font-Oserif`}>Bonjour !</span>
+              </SelectItem>
+
+              <SelectItem value="Reiswar">
+                <span className={`font-Reiswar`}>Bonjour !</span>
+              </SelectItem>
+              <SelectItem value="RokunaAlenthush">
+                <span className={`font-RokunaAlenthush`}>Bonjour !</span>
+              </SelectItem>
+              <SelectItem value="RukishytrialRegular">
+                <span className={`font-RukishytrialRegular`}>Bonjour !</span>
+              </SelectItem>
+              <SelectItem value="SnowyChrista">
+                <span className={`font-SnowyChrista`}>Bonjour !</span>
+              </SelectItem>
             </SelectContent>
           </Select>
           <DialogFooter>

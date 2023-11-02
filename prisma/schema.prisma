@@ -77,13 +77,12 @@ enum Role {
 }
 
 enum Font {
-  LUXURIOUS_ROMAN
-  NOTO_SANS_GEORGIAN
-  VARELA_ROUND
-  ASAP
-  IMPERIAL_SCRIPT
-  TROCHUT
-  ABEL
-  ACME
-  GEOSTAR
+  Pixel
+  Cholten
+  NaturalPrecision
+  Oserif
+  Reiswar
+  RokunaAlenthush
+  RukishytrialRegular
+  SnowyChrista
 }
