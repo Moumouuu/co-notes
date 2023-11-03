@@ -27,6 +27,7 @@ import { Button } from "../ui/button";
 import { fonts } from "@/lib/font";
 import { cn } from "@/lib/utils";
 import { useToast } from "../ui/use-toast";
+import { colors } from "@/lib/colors";
 
 interface NoteWithUsers {
   note: Note & {
@@ -34,21 +35,6 @@ interface NoteWithUsers {
     preference: Preference | null;
   };
 }
-
-const colors = [
-  "#ffffff",
-  "#f28b82",
-  "#fbbc04",
-  "#fff475",
-  "#ccff90",
-  "#a7ffeb",
-  "#cbf0f8",
-  "#aecbfa",
-  "#d7aefb",
-  "#fdcfe8",
-  "#e6c9a8",
-  "#e8eaed",
-];
 
 export default function PersonalizationDialog({ note }: NoteWithUsers) {
   // todo : color doesn't work
@@ -102,7 +88,7 @@ export default function PersonalizationDialog({ note }: NoteWithUsers) {
           <Label className="text-lg pt-3" htmlFor="color">
             Couleur du fond de la note
           </Label>
-          <Select onValueChange={(e)=> setColor(e)} defaultValue={note.preference?.colorBg ?? "#fff"}>
+          <Select onValueChange={(e)=> setColor(e)} defaultValue={note.preference?.colorBg ?? ""}>
             <SelectTrigger id="color" className="w-[180px]">
               <SelectValue placeholder={"Theme"} />
             </SelectTrigger>

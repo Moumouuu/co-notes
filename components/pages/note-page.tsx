@@ -22,13 +22,17 @@ import * as Y from "yjs";
 import NavNoteButtons from "../nav-note-buttons";
 import { fonts } from "@/lib/font";
 import { cn } from "@/lib/utils";
+import { set } from "zod";
+import { useRouter } from "next/navigation";
 
 interface Props {
-  note: Note & {
-    users: User[];
-    preference: Preference | null;
-  };
+  note:  NoteType
   currentUser: User;
+}
+
+interface NoteType extends Note {
+  preference: Preference | null;
+  users: User[];
 }
 
 interface UserWithRights extends User {
@@ -55,17 +59,20 @@ export default function NotePage({ note, currentUser }: Props) {
   */
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const router = useRouter();
+
   const title = useRef<HTMLHeadingElement | null>(null);
+
   const selectedFont = fonts.find(
     (font) => font.name === note.preference?.font
   )?.name;
-  var lastSavedTopLevelBlocks = note.content ? JSON.parse(note.content) : [];
 
   const currentUserRights = note.users.find(
     (u) => u.id === currentUser.id
   ) as UserWithRights;
 
-  const canEdit =
+const canEdit =
     currentUserRights &&
     currentUserRights.userRightNote.find(
       (r: UserRightNote) => r.noteId === note.id
@@ -73,8 +80,9 @@ export default function NotePage({ note, currentUser }: Props) {
       ? false
       : true;
 
+  var lastSavedTopLevelBlocks = note.content ? JSON.parse(note.content) : [];
+  const colorSelected = note.preference?.colorBg;  
   const isOwner = currentUser.id === note.userId;
-
   const doc = new Y.Doc();
 
   const provider = new YPartyKitProvider(
@@ -160,7 +168,7 @@ export default function NotePage({ note, currentUser }: Props) {
     colors: {
       editor: {
         text: "#ffffff",
-        background: "#020817",
+        background: colorSelected ?? "#020817",
       },
       menu: {
         text: "#ffffff",
@@ -198,7 +206,7 @@ export default function NotePage({ note, currentUser }: Props) {
     colors: {
       editor: {
         text: "#000",
-        background: "#fff",
+        background: colorSelected ?? "#fff",
       },
       menu: {
         text: "#000",
@@ -252,8 +260,9 @@ export default function NotePage({ note, currentUser }: Props) {
     dark: Theme;
   };
 
+
   return (
-    <div className={`w-full h-screen overflow-y-scroll pt-12 md:pt-5`} suppressContentEditableWarning={true}>
+    <div style={{backgroundColor: colorSelected ?? "primary"}} className={`w-full h-screen overflow-y-scroll pt-12 md:pt-5`} suppressContentEditableWarning={true}>
       <div className="z-40 flex w-full md:w-[80%] items-center justify-between fixed top-0 backdrop-blur-sm py-5 px-10 pt-14 md:pt-5">
         <div className="flex items-center">
           <h1
