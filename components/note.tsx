@@ -51,6 +51,7 @@ export default function Note({ note, currentUser }: NoteProps) {
         numberDownload : note.numberDownload + 1
       })
       // create new note with content
+      console.log(note.content)
       const newNote = await axios.post("/api/note", {
         title: "Copie de " + note.title,
         content : note.content
@@ -58,7 +59,7 @@ export default function Note({ note, currentUser }: NoteProps) {
       console.log(newNote)
       // todo : redirect crash app and content is a string not an object
       // redirect to new note
-      router.push(`/app/note/${newNote.data.id}`)
+      //router.push(`/app/note/${newNote.data.id}`)
     }catch(e){
       console.log(`Error while updating note ${note.id}: ${e} or creating new note with content`);
     }
