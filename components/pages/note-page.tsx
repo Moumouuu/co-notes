@@ -253,7 +253,7 @@ export default function NotePage({ note, currentUser }: Props) {
   };
 
   return (
-    <div className={`w-full h-screen overflow-y-scroll pt-12 md:pt-5`}>
+    <div className={`w-full h-screen overflow-y-scroll pt-12 md:pt-5`} suppressContentEditableWarning={true}>
       <div className="z-40 flex w-full md:w-[80%] items-center justify-between fixed top-0 backdrop-blur-sm py-5 px-10 pt-14 md:pt-5">
         <div className="flex items-center">
           <h1
@@ -262,7 +262,7 @@ export default function NotePage({ note, currentUser }: Props) {
               `font-${selectedFont}`,
               "text-3xl md:text-4xl font-bold mr-3"
             )}
-            contentEditable
+            contentEditable={true}
           >
             {note.title}
           </h1>

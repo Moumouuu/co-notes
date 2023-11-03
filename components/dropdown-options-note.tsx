@@ -26,12 +26,13 @@ interface NoteWithUsers {
 export default function DropdownOptionsNote({ note, isOwner }: NoteWithUsers) {
   const router = useRouter();
 
-  const handleDeleteNote = async (noteId: string) => {
+  const handleDeleteNote = async () => {
     const res = await axios.delete(`/api/note/${note.id}`);
     if (res.data.success) {
       router.replace("/app");
     }
   };
+  // todo : download note
   const handleDownloadNote = async () => {};
   const handlePublishNote = async () => {
     try {
@@ -55,7 +56,7 @@ export default function DropdownOptionsNote({ note, isOwner }: NoteWithUsers) {
         {isOwner && (
           <>
             <div
-              onClick={() => handleDeleteNote(note.id)}
+              onClick={handleDeleteNote}
               className="flex items-center hover:bg-primary/10 p-3 cursor-pointer "
             >
               <AiFillDelete color={"red"} size={25} />

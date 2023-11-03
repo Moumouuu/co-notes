@@ -35,6 +35,21 @@ interface NoteWithUsers {
   };
 }
 
+const colors = [
+  "#ffffff",
+  "#f28b82",
+  "#fbbc04",
+  "#fff475",
+  "#ccff90",
+  "#a7ffeb",
+  "#cbf0f8",
+  "#aecbfa",
+  "#d7aefb",
+  "#fdcfe8",
+  "#e6c9a8",
+  "#e8eaed",
+];
+
 export default function PersonalizationDialog({ note }: NoteWithUsers) {
   // todo : color doesn't work
   const { toast } = useToast();
@@ -87,20 +102,32 @@ export default function PersonalizationDialog({ note }: NoteWithUsers) {
           <Label className="text-lg pt-3" htmlFor="color">
             Couleur du fond de la note
           </Label>
-          <Input
-            onChange={(e) => setColor(e.target.value)}
-            type="color"
-            id="color"
-            defaultValue={note.preference?.colorBg ?? "#ffffff"}
-          />
+          <Select onValueChange={(e)=> setColor(e)} defaultValue={note.preference?.colorBg ?? "#fff"}>
+            <SelectTrigger id="color" className="w-[180px]">
+              <SelectValue placeholder={"Theme"} />
+            </SelectTrigger>
+            <SelectContent>
+              {colors.map((color) => (
+                <SelectItem
+                  key={color}
+                  value={color}
+                >
+                  <div
+                    className={`w-5 h-5 rounded-full mr-2`}
+                    style={{ backgroundColor: color }}
+                  />
+                </SelectItem>
+              ))}
+            </SelectContent>
+
+          </Select>
           <Label className="text-lg pt-3" htmlFor="font">
             Police d&apos;écriture
           </Label>
-
-          <Select onValueChange={(e: any) => setFontFamily(e)}>
+          <Select onValueChange={(e: any) => setFontFamily(e)} defaultValue={note.preference?.font ?? ""}>
             <SelectTrigger className={cn(`font-${selectedFont}`, "w-[180px]")}>
               <SelectValue
-                placeholder={note.preference?.font ? "Bonjour !" : "Police"}
+                placeholder={"Police"}
               />
             </SelectTrigger>
             {/* Cannot map because tailwind canno't take css with variable*/}
