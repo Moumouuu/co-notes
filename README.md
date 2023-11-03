@@ -79,13 +79,13 @@ Use this space to show useful examples of how a project can be used. Additional 
   - [X] Sharing (read only)
   - [X] Consulting 
   - [X] Deleting
-  - [ ] Personalize (color,background)
-  - [X] Roles (read, edit,admin)
+  - [ ] Personalize (color background & font)
+  - [X] Roles (Read / ReadWrite)
 - [X] Implement realtime editing with collaborator
 - [X] Inviting for collaboration
-- [ ] Organize note (category)
-- [ ] Exporting notes as pdf
-- [ ] Templating
+- [X] Templating
+- [ ] Settings
+- [ ] More 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -120,7 +120,7 @@ Don't forget to give the project a star! Thanks again!
 <!-- CONTACT -->
 ## Contact
 
-Project Link: [https://github.com/Moumouuu/edu-fiche](https://github.com/Moumouuu/edu-fiche)
+Project Link: [https://github.com/Moumouuu/co-notes](https://github.com/Moumouuu/co-notes)
 <br/>
 Mail : robin@pluviaux.fr
 <br/>
