@@ -74,18 +74,18 @@ Use this space to show useful examples of how a project can be used. Additional 
 ## Roadmap
 
 - [ ] Windows pages
-- [ ] Note
+- [X] Note
   - [X] Create
   - [X] Sharing (read only)
   - [X] Consulting 
   - [X] Deleting
-  - [ ] Personalize (color background & font)
-  - [X] Roles (Read / ReadWrite)
+  - [X] Personalize (color background & font)
+- [X] Roles (Read / ReadWrite)
 - [X] Implement realtime editing with collaborator
-- [X] Inviting for collaboration
+- [X] Inviting people for collaboration
 - [X] Templating
-- [ ] Settings
-- [ ] More 
+- [ ] Preview note
+- [ ] More ...
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
