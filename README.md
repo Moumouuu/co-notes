@@ -3,8 +3,8 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://edu-fiche.fr">
-    <img src="public/assets/images/edu-fiche-logo.png" alt="Logo" width="80" height="80">
+  <a href="https://co-notes.fr">
+    <img src="public/assets/images/co-notes-logo.png" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">Share Note - Realtime notes with collaborators</h3>
@@ -41,7 +41,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+[![Product Name Screen Shot][product-screenshot]](https://co-notes.fr)
 
 ...
 
@@ -140,7 +140,7 @@ Website : https://pluviaux.fr
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
-[product-screenshot]: public/assets/images//edufiche.png
+[product-screenshot]: public/images/co-notes-screen.png
 [Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
 [Next-url]: https://nextjs.org/
 [Tailwind]: https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white
