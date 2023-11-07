@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 export default async function page({ params }: { params: { idNote: string } }) {
   const user = await getUser();
   const idNote = params.idNote;
+
   const note = await prismadb.note.findUnique({
     where: {
       id: idNote,
@@ -29,7 +30,11 @@ export default async function page({ params }: { params: { idNote: string } }) {
   }
 
   // protect page from other users
-  if (user && !note.users.find((u) => u.id === user.id)) {
+  if (
+    user &&
+    !note.users.find((u) => u.id === user.id) &&
+    !(user.email == process.env.NEXT_PUBLIC_PUPPETEER_ADMIN)
+  ) {
     return redirect("/app");
   }
 

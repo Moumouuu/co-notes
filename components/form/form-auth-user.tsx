@@ -149,6 +149,7 @@ export default function UserAuthForm() {
                 )}
               </div>
               <Button
+                id="submit"
                 disabled={isLoading}
                 className={cn("w-full mt-4", isLoading && "opacity-50")}
               >

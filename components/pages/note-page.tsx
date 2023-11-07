@@ -22,11 +22,9 @@ import * as Y from "yjs";
 import NavNoteButtons from "../nav-note-buttons";
 import { fonts } from "@/lib/font";
 import { cn } from "@/lib/utils";
-import { set } from "zod";
-import { useRouter } from "next/navigation";
 
 interface Props {
-  note:  NoteType
+  note: NoteType;
   currentUser: User;
 }
 
@@ -40,10 +38,10 @@ interface UserWithRights extends User {
 }
 
 export default function NotePage({ note, currentUser }: Props) {
-  /*const generateScreenshot = async () => {
+  const generateScreenshot = async () => {
     try {
       const res = await axios.post("/api/note/screenshot", {
-        url: `${process.env.NEXT_PUBLIC_APP_URL}/app/note/${note.id}}`,
+        url: `${process.env.NEXT_PUBLIC_APP_URL}/app/note/${note.id}`,
       });
 
       // save screenshot for the current note & remove old one
@@ -55,12 +53,8 @@ export default function NotePage({ note, currentUser }: Props) {
       console.error(`Error while generating screenshot & updating: ${error}`);
     }
   };
-  generateScreenshot();
-  */
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const router = useRouter();
 
   const title = useRef<HTMLHeadingElement | null>(null);
 
@@ -72,7 +66,7 @@ export default function NotePage({ note, currentUser }: Props) {
     (u) => u.id === currentUser.id
   ) as UserWithRights;
 
-const canEdit =
+  const canEdit =
     currentUserRights &&
     currentUserRights.userRightNote.find(
       (r: UserRightNote) => r.noteId === note.id
@@ -81,7 +75,7 @@ const canEdit =
       : true;
 
   var lastSavedTopLevelBlocks = note.content ? JSON.parse(note.content) : [];
-  const colorSelected = note.preference?.colorBg;  
+  const colorSelected = note.preference?.colorBg;
   const isOwner = currentUser.id === note.userId;
   const doc = new Y.Doc();
 
@@ -130,6 +124,9 @@ const canEdit =
     if (isSaved) return;
     try {
       setIsLoading(true);
+
+      generateScreenshot();
+
       const content: Block[] = editor.topLevelBlocks;
       await axios.put("/api/note", {
         idNote: note.id,
@@ -147,7 +144,7 @@ const canEdit =
   useEffect(() => {
     const interval = setInterval(() => {
       saveContent();
-    }, 5000);
+    }, 10000);
     // Fonction pour arrêter l'intervalle lorsque le composant est démonté
     return () => {
       clearInterval(interval);
@@ -156,7 +153,6 @@ const canEdit =
 
   useEffect(() => {
     window.addEventListener("beforeunload", saveContent);
-
     return () => {
       window.removeEventListener("beforeunload", saveContent);
     };
@@ -260,9 +256,12 @@ const canEdit =
     dark: Theme;
   };
 
-
   return (
-    <div style={{backgroundColor: colorSelected ?? "primary"}} className={`w-full h-screen overflow-y-scroll pt-12 md:pt-5`} suppressContentEditableWarning={true}>
+    <div
+      style={{ backgroundColor: colorSelected ?? "primary" }}
+      className={`w-full h-screen overflow-y-scroll pt-12 md:pt-5`}
+      suppressContentEditableWarning={true}
+    >
       <div className="z-40 flex w-full md:w-[80%] items-center justify-between fixed top-0 backdrop-blur-sm py-5 px-10 pt-14 md:pt-5">
         <div className="flex items-center">
           <h1

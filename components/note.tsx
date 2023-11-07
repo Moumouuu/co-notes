@@ -48,31 +48,39 @@ export default function Note({ note, currentUser }: NoteProps) {
       // increment numberDownload
       await axios.put("/api/note", {
         idNote: note.id,
-        numberDownload : note.numberDownload + 1
-      })
+        numberDownload: note.numberDownload + 1,
+      });
       // create new note with content
       const newNote = await axios.post("/api/note", {
         title: "Copie de " + note.title,
-        content : note.content
-      })
+        content: note.content,
+      });
       // redirect to new note
-      router.push(`/app/note/${newNote.data.id}`)
-    }catch(e){
-      console.log(`Error while updating note ${note.id}: ${e} or creating new note with content`);
+      router.push(`/app/note/${newNote.data.id}`);
+    } catch (e) {
+      console.log(
+        `Error while updating note ${note.id}: ${e} or creating new note with content`
+      );
     }
   };
 
   return (
     <div
-      className={cn(
-        "my-10 w-[300px] h-[300px] flex-shrink-0 border rounded-xl shadow-lg mx-4",
-        note.image ? "bg-white" : "bg-no-background-note"
-      )}
+      style={{
+        backgroundImage: note.image ? `url('${note.image}')` : "url('/images/default-note.png')",
+        backgroundSize: "contain",
+        backgroundRepeat: "no-repeat",
+        backgroundColor: "white",
+        backgroundPosition: "center",
+      }}
+      className={
+        "my-10 w-[250px] h-[350px] flex-shrink-0 border rounded-xl shadow-lg mx-4"
+      }
     >
       <div className="h-full flex flex-col justify-between">
         <Link href={`/app/note/${note.id}`} className="h-full">
           <div className="flex flex-col">
-            <div className="flex flex-row justify-between items-center px-4 py-2 text-black">
+            <div className="flex flex-row justify-between items-center px-4 py-2 text-black bg-white rounded-xl">
               <h3 className="text-xl font-bold">{note.title}</h3>
             </div>
           </div>

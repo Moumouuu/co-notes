@@ -8,39 +8,64 @@ import path from "path";
 import puppeteer from "puppeteer";
 
 export async function POST(req: NextRequest, res: NextResponse) {
-  // todo : find another option because this one is not working -> redirect to login page
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-  const { url } = await req.json(); // Récupérez l'URL de la page à prévisualiser depuis les paramètres de requête
+  try {
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    const { url } = await req.json();
 
-  await page.goto(url, { waitUntil: "networkidle2" });
+    // set viewport size mobile
+    await page.setViewport({ width: 450, height: 812 });
 
-  const screenshot = await page.screenshot();
+    // Naviguer vers la page de connexion
+    await page.goto(url, { waitUntil: "networkidle2" });
 
-  await browser.close();
+    // Remplir les champs de connexion
+    await page.type("#email", process.env.NEXT_PUBLIC_PUPPETEER_ADMIN!);
+    await page.type("#password", process.env.NEXT_PUBLIC_PUPPETEER_PASSWORD!);
+    await Promise.all([
+      page.click("#submit"),
+      page.waitForNavigation({ waitUntil: "networkidle2" }),
+    ]);
 
-  // Générez un nom de fichier unique en utilisant un horodatage
-  const timestamp = new Date().getTime();
-  const imageFileName = `screenshot_${timestamp}.png`;
+    // go to sheetPage
+    await page.goto(url, { waitUntil: "load" });
 
-  // Définissez le chemin du fichier où vous souhaitez enregistrer l'image
-  const imageFilePath = path.join(
-    process.cwd(),
-    "public",
-    "images",
-    "screenshot",
-    imageFileName
-  );
+    // Prendre une capture d'écran
+    const screenshot = await page.screenshot();
 
-  // Enregistrez la capture d'écran dans le fichier spécifié
-  fs.writeFileSync(imageFilePath, screenshot);
+    // Fermer le navigateur
+    await browser.close();
 
-  // Renvoyez l'URL de l'image avec le nom de fichier unique
-  return NextResponse.json({
-    url: `public/images/screenshot/${imageFileName}`,
-  });
+    // Générer un nom de fichier unique en utilisant un horodatage
+    const timestamp = new Date().getTime();
+    const imageFileName = `screenshot_${timestamp}.png`;
+
+    // Créer un dossier s'il n'existe pas encore
+    const dir = path.join(process.cwd(), "public", "images", "screenshot");
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+
+    // Définir le chemin du fichier où vous souhaitez enregistrer l'image
+    const imageFilePath = path.join(
+      process.cwd(),
+      "public",
+      "images",
+      "screenshot",
+      imageFileName
+    );
+
+    // Enregistrer la capture d'écran dans le fichier spécifié
+    fs.writeFileSync(imageFilePath, screenshot);
+
+    // Renvoyer l'URL de l'image avec le nom de fichier unique
+    return NextResponse.json({
+      url: `images/screenshot/${imageFileName}`,
+    });
+  } catch (error) {
+    return NextResponse.json({ error }, { status: 500 });
+  }
 }
-
 export async function PUT(req: NextRequest, res: NextResponse) {
   const session = await getServerSession(authOptions);
 
@@ -69,6 +94,8 @@ export async function PUT(req: NextRequest, res: NextResponse) {
     throw new Response("Note not found");
   }
 
+  // !! todo : remove old image
+  /*
   if (note.image) {
     // Obtenez le chemin complet de l'ancienne image
     const oldImageFilePath = path.join(process.cwd(), note.image);
@@ -76,7 +103,7 @@ export async function PUT(req: NextRequest, res: NextResponse) {
     // Supprimez l'ancienne image du dossier "public"
     fs.unlinkSync(oldImageFilePath);
   }
-
+*/
   // Mettez à jour la base de données avec la nouvelle image
   const updatedNote = await prismadb.note.update({
     where: {
