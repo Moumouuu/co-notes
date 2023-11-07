@@ -10,7 +10,7 @@ import puppeteer from "puppeteer";
 export async function POST(req: NextRequest, res: NextResponse) {
   try {
     const browser = await puppeteer.launch({
-      headless: true,
+      headless: "new"
     });
     const page = await browser.newPage();
     const { url } = await req.json();
