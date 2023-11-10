@@ -85,7 +85,7 @@ export default function Note({ note, currentUser }: NoteProps) {
             </div>
           </div>
         </Link>
-        <div className="flex flex-row justify-between items-center px-4 py-2">
+        <div className="flex flex-row justify-between items-center px-4 py-2 bg-white">
           <div className="flex flex-row items-center">
             <AiOutlineDownload className="mr-2" color={"black"} />
             <p className="text-black">{note.numberDownload}</p>

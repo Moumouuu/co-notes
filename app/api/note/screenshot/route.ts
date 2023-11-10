@@ -8,7 +8,6 @@ import path from "path";
 import puppeteer from "puppeteer";
 
 export async function POST(req: NextRequest, res: NextResponse) {
-  try {
     const browser = await puppeteer.launch({
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
       headless: "new",
@@ -68,9 +67,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
     return NextResponse.json({
       url: `images/screenshot/${"imageFileName"}`,
     });
-  } catch (error) {
-    return NextResponse.json(error , { status: 500 });
-  }
 }
 export async function PUT(req: NextRequest, res: NextResponse) {
   const session = await getServerSession(authOptions);
