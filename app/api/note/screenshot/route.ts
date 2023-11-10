@@ -20,9 +20,11 @@ async function getBrowser() {
   });
 }
 
-export const maxDuration = 300; // 5 minutes
+export const maxDuration = 100; // 5 minutes
 
 export async function POST(req: NextRequest, res: NextResponse) {
+  module.exports = async (req:any, res:any) => {
+
   const { url } = await req.json();
 
     const browser = await getBrowser();
@@ -74,10 +76,11 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
     // Enregistrer la capture d'écran dans le fichier spécifié
     fs.writeFileSync(imageFilePath, screenshot);
+  }
 
   // Renvoyer l'URL de l'image avec le nom de fichier unique
   return NextResponse.json({
-    url: `images/screenshot/${imageFileName}`,
+    url: `images/screenshot/${'imageFileName'}`,
   });
 }
 export async function PUT(req: NextRequest, res: NextResponse) {
