@@ -55,6 +55,7 @@
     "zustand": "^4.4.3"
   },
   "devDependencies": {
+    "@sparticuz/chromium": "^118.0.0",
     "@types/bcrypt": "^5.0.1",
     "@types/node": "^20",
     "@types/react": "^18",

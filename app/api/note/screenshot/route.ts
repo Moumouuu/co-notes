@@ -6,12 +6,17 @@ import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import path from "path";
 import puppeteer from "puppeteer";
+import chromium from '@sparticuz/chromium';
 
 export async function POST(req: NextRequest, res: NextResponse) {
+
+  chromium.setHeadlessMode = true;
+
     const browser = await puppeteer.launch({
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
-      headless: 'new',
+      args: [...chromium.args, "--no-sandbox", "--disable-setuid-sandbox"],
+      headless: chromium.headless,
     });
+
     const page = await browser.newPage();
     const { url } = await req.json();
 
