@@ -69,7 +69,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       url: `images/screenshot/${"imageFileName"}`,
     });
   } catch (error) {
-    return NextResponse.json({ error }, { status: 500 });
+    return NextResponse.json(error , { status: 500 });
   }
 }
 export async function PUT(req: NextRequest, res: NextResponse) {
