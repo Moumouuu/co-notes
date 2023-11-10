@@ -1,24 +1,24 @@
-// pages/api/screenshot.js
 import { authOptions } from "@/lib/auth";
 import prismadb from "@/lib/prismadb";
 import fs from "fs";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import path from "path";
-import puppeteer from "puppeteer";
-import chromium from '@sparticuz/chromium';
+
+const puppeteer = require("puppeteer-core");
+const chromium = require("@sparticuz/chromium");
 
 export async function POST(req: NextRequest, res: NextResponse) {
-
-  chromium.setHeadlessMode = true;
+    const { url } = await req.json();
 
     const browser = await puppeteer.launch({
-      args: [...chromium.args, "--no-sandbox", "--disable-setuid-sandbox"],
+      args: chromium.args,
+      executablePath: await chromium.executablePath(),
       headless: chromium.headless,
+      ignoreHTTPSErrors: true,
     });
 
     const page = await browser.newPage();
-    const { url } = await req.json();
 
     // set viewport size mobile
     await page.setViewport({ width: 450, height: 812 });
