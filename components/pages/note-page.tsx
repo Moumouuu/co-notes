@@ -15,13 +15,15 @@ import {
 } from "@blocknote/react";
 import { Note, Preference, User, UserRightNote } from "@prisma/client";
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { createRef, useEffect, useRef, useState } from "react";
 import { BiLoader, BiSave } from "react-icons/bi";
 import YPartyKitProvider from "y-partykit/provider";
 import * as Y from "yjs";
 import NavNoteButtons from "../nav-note-buttons";
 import { fonts } from "@/lib/font";
 import { cn } from "@/lib/utils";
+
+import { useScreenshot } from 'use-react-screenshot'
 
 interface Props {
   note: NoteType;
@@ -38,21 +40,26 @@ interface UserWithRights extends User {
 }
 
 export default function NotePage({ note, currentUser }: Props) {
+  
   const generateScreenshot = async () => {
-    try {
-      const res = await axios.post("/api/note/screenshot", {
-        url: `${process.env.NEXT_PUBLIC_APP_URL}/app/note/${note.id}`,
-      });
+    // try {
+    //   const res = await axios.post("/api/note/screenshot", {
+    //     url: `${process.env.NEXT_PUBLIC_APP_URL}/app/note/${note.id}`,
+    //   });
 
-      // save screenshot for the current note & remove old one
-      await axios.put("/api/note/screenshot", {
-        idNote: note.id,
-        image: res.data.url,
-      });
-    } catch (error) {
-      console.error(`Error while generating screenshot & updating: ${error}`);
-    }
+    //   // save screenshot for the current note & remove old one
+    //   await axios.put("/api/note/screenshot", {
+    //     idNote: note.id,
+    //     image: res.data.url,
+    //   });
+    // } catch (error) {
+    //   console.error(`Error while generating screenshot & updating: ${error}`);
+    // }
   };
+
+  const ref = createRef()
+  const [image, takeScreenshot] = useScreenshot()
+  const getImage = () => takeScreenshot(ref.current)
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -258,6 +265,7 @@ export default function NotePage({ note, currentUser }: Props) {
 
   return (
     <div
+      ref={ref}
       style={{ backgroundColor: colorSelected ?? "primary" }}
       className={`w-full h-screen overflow-y-scroll pt-12 md:pt-5`}
       suppressContentEditableWarning={true}
