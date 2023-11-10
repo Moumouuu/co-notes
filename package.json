@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npx prisma generate && npx prisma db push && npm install && cd ./node_modules/puppeteer && npm install && cd ../../  && next build",
+    "build": "npx prisma generate && npx prisma db push && cd ./node_modules/puppeteer && npm install && cd ../../  && next build",
     "start": "next start",
     "lint": "next lint"
   },

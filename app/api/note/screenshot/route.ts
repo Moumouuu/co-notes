@@ -5,12 +5,12 @@ import fs from "fs";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import path from "path";
-import puppeteer from "puppeteer";
+import puppeteer from "puppeteer-core";
 
 export async function POST(req: NextRequest, res: NextResponse) {
     const browser = await puppeteer.launch({
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
-      headless: "new",
+      headless: true,
     });
     const page = await browser.newPage();
     const { url } = await req.json();
@@ -33,7 +33,10 @@ export async function POST(req: NextRequest, res: NextResponse) {
     await page.goto(url, { waitUntil: "load" });
 
     // Prendre une capture d'écran
-    const screenshot = await page.screenshot();
+    const screenshot:any = await page.screenshot({
+      fullPage: true,
+      type: "png",
+    });
 
     // Fermer le navigateur
     await browser.close();
