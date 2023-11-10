@@ -6,11 +6,15 @@ import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import path from "path";
 import puppeteer from "puppeteer";
+import chromium from 'chrome-aws-lambda';
 
 export async function POST(req: NextRequest, res: NextResponse) {
-    const browser = await puppeteer.launch({
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
-      headless: 'new',
+
+    const browser = await chromium.puppeteer.launch({
+      args: [...chromium.args,"--no-sandbox", "--disable-setuid-sandbox"],
+      headless: true,
+      executablePath: await chromium.executablePath,
+      ignoreHTTPSErrors: true,
     });
     const page = await browser.newPage();
     const { url } = await req.json();
@@ -40,31 +44,31 @@ export async function POST(req: NextRequest, res: NextResponse) {
     // Fermer le navigateur
     await browser.close();
 
-    // Générer un nom de fichier unique en utilisant un horodatage
-    const timestamp = new Date().getTime();
-    const imageFileName = `screenshot_${timestamp}.png`;
+    // // Générer un nom de fichier unique en utilisant un horodatage
+    // const timestamp = new Date().getTime();
+    // const imageFileName = `screenshot_${timestamp}.png`;
 
-    // Créer un dossier s'il n'existe pas encore
-    const dir = path.join(process.cwd(), "public", "images", "screenshot");
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
-    }
+    // // Créer un dossier s'il n'existe pas encore
+    // const dir = path.join(process.cwd(), "public", "images", "screenshot");
+    // if (!fs.existsSync(dir)) {
+    //   fs.mkdirSync(dir, { recursive: true });
+    // }
 
-    // Définir le chemin du fichier où vous souhaitez enregistrer l'image
-    const imageFilePath = path.join(
-      process.cwd(),
-      "public",
-      "images",
-      "screenshot",
-      imageFileName
-    );
+    // // Définir le chemin du fichier où vous souhaitez enregistrer l'image
+    // const imageFilePath = path.join(
+    //   process.cwd(),
+    //   "public",
+    //   "images",
+    //   "screenshot",
+    //   imageFileName
+    // );
 
-    // Enregistrer la capture d'écran dans le fichier spécifié
-    fs.writeFileSync(imageFilePath, screenshot);
+    // // Enregistrer la capture d'écran dans le fichier spécifié
+    // fs.writeFileSync(imageFilePath, screenshot);
 
     // Renvoyer l'URL de l'image avec le nom de fichier unique
     return NextResponse.json({
-      url: `images/screenshot/${imageFileName}`,
+      url: `images/screenshot/${'imageFileName'}`,
     });
 }
 export async function PUT(req: NextRequest, res: NextResponse) {
