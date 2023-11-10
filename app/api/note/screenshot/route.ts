@@ -5,19 +5,25 @@ import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import path from "path";
 
+const chromium = require("@sparticuz/chromium-min");
 const puppeteer = require("puppeteer-core");
-const chromium = require("@sparticuz/chromium");
+
+async function getBrowser() {
+  return puppeteer.launch({
+    args: [...chromium.args, "--hide-scrollbars", "--disable-web-security"],
+    defaultViewport: chromium.defaultViewport,
+    executablePath: await chromium.executablePath(
+      `https://github.com/Sparticuz/chromium/releases/download/v116.0.0/chromium-v116.0.0-pack.tar`
+    ),
+    headless: chromium.headless,
+    ignoreHTTPSErrors: true,
+  });
+}
 
 export async function POST(req: NextRequest, res: NextResponse) {
-    const { url } = await req.json();
+  const { url } = await req.json();
 
-    const browser = await puppeteer.launch({
-      args: chromium.args,
-      executablePath: await chromium.executablePath(),
-      headless: chromium.headless,
-      ignoreHTTPSErrors: true,
-    });
-
+    const browser = await getBrowser();
     const page = await browser.newPage();
 
     // set viewport size mobile
@@ -67,10 +73,10 @@ export async function POST(req: NextRequest, res: NextResponse) {
     // Enregistrer la capture d'écran dans le fichier spécifié
     fs.writeFileSync(imageFilePath, screenshot);
 
-    // Renvoyer l'URL de l'image avec le nom de fichier unique
-    return NextResponse.json({
-      url: `images/screenshot/${imageFileName}`,
-    });
+  // Renvoyer l'URL de l'image avec le nom de fichier unique
+  return NextResponse.json({
+    url: `images/screenshot/${imageFileName}`,
+  });
 }
 export async function PUT(req: NextRequest, res: NextResponse) {
   const session = await getServerSession(authOptions);

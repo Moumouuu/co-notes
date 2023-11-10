@@ -4,7 +4,7 @@ const nextConfig = {
         domains: ['lh3.googleusercontent.com'],
     },
     experimental : {
-      serverComponentsExternalPackages: ["puppeteer", "puppeteer-core"],
+      serverComponentsExternalPackages: ["puppeteer", "puppeteer-core", "chrome-aws-lambda"],
     },
       compiler: {
         // Enables the styled-components SWC transform
