@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npx prisma generate && npx prisma db push && cd ./node_modules/puppeteer && npm install && cd ../../ && next build",
+    "build": "npx prisma generate && npx prisma db push && node node_modules/puppeteer/install.js && next build",
     "start": "next start",
     "lint": "next lint"
   },
@@ -38,6 +38,7 @@
     "prisma": "^5.4.2",
     "prisma-client": "^0.0.0",
     "puppeteer": "^21.4.0",
+    "puppeteer-core": "^10.4.0",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.47.0",
