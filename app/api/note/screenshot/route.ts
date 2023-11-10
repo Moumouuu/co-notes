@@ -39,31 +39,34 @@ export async function POST(req: NextRequest, res: NextResponse) {
     // Fermer le navigateur
     await browser.close();
 
-    // Générer un nom de fichier unique en utilisant un horodatage
-    const timestamp = new Date().getTime();
-    const imageFileName = `screenshot_${timestamp}.png`;
+    // todo : check error 500
 
-    // Créer un dossier s'il n'existe pas encore
-    const dir = path.join(process.cwd(), "public", "images", "screenshot");
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
-    }
 
-    // Définir le chemin du fichier où vous souhaitez enregistrer l'image
-    const imageFilePath = path.join(
-      process.cwd(),
-      "public",
-      "images",
-      "screenshot",
-      imageFileName
-    );
+    // // Générer un nom de fichier unique en utilisant un horodatage
+    // const timestamp = new Date().getTime();
+    // const imageFileName = `screenshot_${timestamp}.png`;
 
-    // Enregistrer la capture d'écran dans le fichier spécifié
-    fs.writeFileSync(imageFilePath, screenshot);
+    // // Créer un dossier s'il n'existe pas encore
+    // const dir = path.join(process.cwd(), "public", "images", "screenshot");
+    // if (!fs.existsSync(dir)) {
+    //   fs.mkdirSync(dir, { recursive: true });
+    // }
+
+    // // Définir le chemin du fichier où vous souhaitez enregistrer l'image
+    // const imageFilePath = path.join(
+    //   process.cwd(),
+    //   "public",
+    //   "images",
+    //   "screenshot",
+    //   imageFileName
+    // );
+
+    // // Enregistrer la capture d'écran dans le fichier spécifié
+    // fs.writeFileSync(imageFilePath, screenshot);
 
     // Renvoyer l'URL de l'image avec le nom de fichier unique
     return NextResponse.json({
-      url: `images/screenshot/${imageFileName}`,
+      url: `images/screenshot/${"imageFileName"}`,
     });
   } catch (error) {
     return NextResponse.json({ error }, { status: 500 });
