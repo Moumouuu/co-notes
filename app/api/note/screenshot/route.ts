@@ -20,6 +20,8 @@ async function getBrowser() {
   });
 }
 
+export const maxDuration = 300; // 5 minutes
+
 export async function POST(req: NextRequest, res: NextResponse) {
   const { url } = await req.json();
 
@@ -32,16 +34,16 @@ export async function POST(req: NextRequest, res: NextResponse) {
     // Naviguer vers la page de connexion
     await page.goto(url, { waitUntil: "networkidle2" });
 
-    // Remplir les champs de connexion
-    await page.type("#email", process.env.NEXT_PUBLIC_PUPPETEER_ADMIN!);
-    await page.type("#password", process.env.NEXT_PUBLIC_PUPPETEER_PASSWORD!);
-    await Promise.all([
-      page.click("#submit"),
-      page.waitForNavigation({ waitUntil: "networkidle2" }),
-    ]);
+    // // Remplir les champs de connexion
+    // await page.type("#email", process.env.NEXT_PUBLIC_PUPPETEER_ADMIN!);
+    // await page.type("#password", process.env.NEXT_PUBLIC_PUPPETEER_PASSWORD!);
+    // await Promise.all([
+    //   page.click("#submit"),
+    //   page.waitForNavigation({ waitUntil: "networkidle2" }),
+    // ]);
 
-    // go to sheetPage
-    await page.goto(url, { waitUntil: "load" });
+    // // go to sheetPage
+    // await page.goto(url, { waitUntil: "load" });
 
     // Prendre une capture d'écran
     const screenshot = await page.screenshot({
