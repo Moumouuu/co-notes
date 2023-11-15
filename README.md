@@ -84,7 +84,7 @@ Use this space to show useful examples of how a project can be used. Additional 
 - [X] Implement realtime editing with collaborator
 - [X] Inviting people for collaboration
 - [X] Templating
-- [ ] Preview note
+- [X] Preview note
 - [ ] More ...
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
