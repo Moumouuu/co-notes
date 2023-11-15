@@ -109,6 +109,7 @@ export default function NotePage({ note, currentUser }: Props) {
         fileName: note.id + ".png",
         noteId : note.id
       });
+
     } catch (error) {
       console.error(`Error while generating screenshot & updating: ${error}`);
     }

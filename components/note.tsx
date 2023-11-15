@@ -5,9 +5,10 @@ import type { Note, User } from "@prisma/client";
 import axios from "axios";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AiFillHeart, AiOutlineDownload, AiOutlineHeart } from "react-icons/ai";
 import { Button } from "./ui/button";
+import Image from "next/image";
 
 interface NoteProps {
   currentUser: User;
@@ -66,23 +67,23 @@ export default function Note({ note, currentUser }: NoteProps) {
 
   return (
     <div
-      style={{
-        backgroundImage: note.image ? `url('${note.image}')` : "url('/images/default-note.png')",
-        backgroundSize: "contain",
-        backgroundRepeat: "no-repeat",
-        backgroundColor: "white",
-        backgroundPosition: "center",
-      }}
       className={
         "my-10 w-[250px] h-[350px] flex-shrink-0 border rounded-xl shadow-lg mx-4"
       }
     >
       <div className="h-full flex flex-col justify-between">
-        <Link href={`/app/note/${note.id}`} className="h-full">
-          <div className="flex flex-col">
-            <div className="flex flex-row justify-between items-center px-4 py-2 text-black bg-white rounded-xl">
+        <Link href={`/app/note/${note.id}`} className="h-full bg-white">
+          <div className="flex flex-col" >
+            <div className="flex flex-row justify-between items-center px-4 py-2 text-black bg-white">
               <h3 className="text-xl font-bold">{note.title}</h3>
             </div>
+            <Image
+              alt={`screenshot note ${note.id}`}
+              quality={100}
+              src={note.image ? "/" + note.image : "/images/default-note.png"}
+              width={250}
+              height={300}
+            />
           </div>
         </Link>
         <div className="flex flex-row justify-between items-center px-4 py-2 bg-white">
