@@ -46,11 +46,6 @@ export default function AsideMenuContent({
       href: `${workdir}/templates`,
       icon: <HiTemplate size={20} />,
     },
-    {
-      title: "Paramètres",
-      href: `${workdir}/settings`,
-      icon: <IoSettings size={20} />,
-    },
   ];
 
   return (
