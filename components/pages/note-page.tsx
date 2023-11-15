@@ -15,15 +15,14 @@ import {
 } from "@blocknote/react";
 import { Note, Preference, User, UserRightNote } from "@prisma/client";
 import axios from "axios";
-import { createRef, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BiLoader, BiSave } from "react-icons/bi";
 import YPartyKitProvider from "y-partykit/provider";
 import * as Y from "yjs";
 import NavNoteButtons from "../nav-note-buttons";
 import { fonts } from "@/lib/font";
 import { cn } from "@/lib/utils";
-
-import { useScreenshot } from 'use-react-screenshot'
+import html2canvas from "html2canvas";
 
 interface Props {
   note: NoteType;
@@ -40,26 +39,6 @@ interface UserWithRights extends User {
 }
 
 export default function NotePage({ note, currentUser }: Props) {
-  
-  const generateScreenshot = async () => {
-    // try {
-    //   const res = await axios.post("/api/note/screenshot", {
-    //     url: `${process.env.NEXT_PUBLIC_APP_URL}/app/note/${note.id}`,
-    //   });
-
-    //   // save screenshot for the current note & remove old one
-    //   await axios.put("/api/note/screenshot", {
-    //     idNote: note.id,
-    //     image: res.data.url,
-    //   });
-    // } catch (error) {
-    //   console.error(`Error while generating screenshot & updating: ${error}`);
-    // }
-  };
-
-  const ref = createRef()
-  const [image, takeScreenshot] = useScreenshot()
-  const getImage = () => takeScreenshot(ref.current)
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -119,6 +98,21 @@ export default function NotePage({ note, currentUser }: Props) {
       },
     },
   });
+
+  const generateScreenshot = async () => {
+    const canvas = await html2canvas(document.getElementById("note")!);
+    const image = canvas.toDataURL("image/png", 1.0);
+
+    try {
+      await axios.post("/api/note/screenshot", {
+        imageData: image.split(",")[1],
+        fileName: note.id + ".png",
+        noteId : note.id
+      });
+    } catch (error) {
+      console.error(`Error while generating screenshot & updating: ${error}`);
+    }
+  };
 
   const saveContent = async () => {
     const isSaved =
@@ -265,10 +259,10 @@ export default function NotePage({ note, currentUser }: Props) {
 
   return (
     <div
-      ref={ref}
       style={{ backgroundColor: colorSelected ?? "primary" }}
       className={`w-full h-screen overflow-y-scroll pt-12 md:pt-5`}
       suppressContentEditableWarning={true}
+      id="note"
     >
       <div className="z-40 flex w-full md:w-[80%] items-center justify-between fixed top-0 backdrop-blur-sm py-5 px-10 pt-14 md:pt-5">
         <div className="flex items-center">
