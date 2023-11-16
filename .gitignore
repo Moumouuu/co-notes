@@ -37,4 +37,4 @@ next-env.d.ts
 .env
 
 # remove screenshots
-public/images/screenshot/*
+public/images/screenshot/*.png

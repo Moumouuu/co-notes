@@ -8,14 +8,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
   if (!imageData || !fileName || !noteId) throw new Response("Missing data");
 
-    
-  const publicFolderPath = path.join(
-    process.cwd(),
-    "public",
-    "images",
-    "screenshot"
-  );
-
+  //create folder screenshot in public/images if not exist
+  const publicFolderPath = path.join(process.cwd(), "public/images/screenshot");
   if (!fs.existsSync(publicFolderPath)) {
     fs.mkdirSync(publicFolderPath);
   }
@@ -36,9 +30,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
       },
     });
 
-    if(!res) throw new NextResponse("Error updating note");
-    return NextResponse.json({res});
-    
+    if (!res) throw new NextResponse("Error updating note");
+    return NextResponse.json({ res });
   } catch (error: any) {
     throw new NextResponse(error);
   }
