@@ -21,8 +21,9 @@ import YPartyKitProvider from "y-partykit/provider";
 import * as Y from "yjs";
 import NavNoteButtons from "../nav-note-buttons";
 import { fonts } from "@/lib/font";
-import { cn } from "@/lib/utils";
+import { cn, dataURLtoFile, generateRandomColor } from "@/lib/utils";
 import html2canvas from "html2canvas";
+import { useEdgeStore } from "@/lib/edgestore";
 
 interface Props {
   note: NoteType;
@@ -41,6 +42,7 @@ interface UserWithRights extends User {
 export default function NotePage({ note, currentUser }: Props) {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { edgestore } = useEdgeStore();
 
   const title = useRef<HTMLHeadingElement | null>(null);
 
@@ -72,15 +74,6 @@ export default function NotePage({ note, currentUser }: Props) {
     doc
   );
 
-  const generateRandomColor = () => {
-    const letters = "0123456789ABCDEF";
-    let color = "#";
-    for (let i = 2; i < 8; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-  };
-
   const editor: BlockNoteEditor = useBlockNote({
     editable: canEdit,
     initialContent: note.content
@@ -100,13 +93,25 @@ export default function NotePage({ note, currentUser }: Props) {
   });
 
   const generateScreenshot = async () => {
+    const fileName = note.id + ".png";
+    
+    // generate screenshot of the note and upload it to the edge store
     const canvas = await html2canvas(document.getElementById("note")!);
     const image = canvas.toDataURL("image/png", 1.0);
 
+    const file = dataURLtoFile(image, fileName);
+
+    const res = await edgestore.publicFiles.upload({
+      file,
+      options: {
+        replaceTargetUrl: note.image ?? undefined,
+      }
+    });
+
+    //updating the note with the screenshot url
     try {
       await axios.post("/api/note/screenshot", {
-        imageData: image.split(",")[1],
-        fileName: note.id + ".png",
+        url: res.url,
         noteId : note.id
       });
 

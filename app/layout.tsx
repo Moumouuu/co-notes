@@ -7,6 +7,7 @@ import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
 
 import { ThemeProvider } from "@/components/theme-provider";
+import { EdgeStoreProvider } from "@/lib/edgestore";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -33,7 +34,7 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <AuthContext session={session}>
-            {children}
+            <EdgeStoreProvider>{children}</EdgeStoreProvider>
             <Analytics />
           </AuthContext>
         </ThemeProvider>

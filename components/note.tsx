@@ -80,7 +80,7 @@ export default function Note({ note, currentUser }: NoteProps) {
             <Image
               alt={`screenshot note ${note.id}`}
               quality={100}
-              src={note.image ? "/" + note.image : "/images/default-note.png"}
+              src={note.image ? note.image : "/images/default-note.png"}
               width={250}
               height={300}
             />
