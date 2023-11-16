@@ -8,10 +8,17 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
   if (!imageData || !fileName || !noteId) throw new Response("Missing data");
 
-  //create folder screenshot in public/images if not exist
-  const publicFolderPath = path.join(process.cwd(), "public/images/screenshot");
+    
+  const publicFolderPath = path.join(
+    process.cwd(),
+    "public",
+    "images",
+    "screenshot"
+  );
+
+  // create the folder screenshot in public/images/ if it doesn't exist
   if (!fs.existsSync(publicFolderPath)) {
-    fs.mkdirSync(publicFolderPath);
+    fs.mkdirSync(publicFolderPath, { recursive: true });
   }
 
   const filePath = path.join(publicFolderPath, fileName);
@@ -30,8 +37,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
       },
     });
 
-    if (!res) throw new NextResponse("Error updating note");
-    return NextResponse.json({ res });
+    if(!res) throw new NextResponse("Error updating note");
+    return NextResponse.json({res});
+    
   } catch (error: any) {
     throw new NextResponse(error);
   }
