@@ -16,11 +16,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
     "screenshot"
   );
 
-  // create the folder screenshot in public/images/ if it doesn't exist
-  if (!fs.existsSync(publicFolderPath)) {
-    fs.mkdirSync(publicFolderPath, { recursive: true });
-  }
-
   const filePath = path.join(publicFolderPath, fileName);
 
   // Save the image to the public folder
