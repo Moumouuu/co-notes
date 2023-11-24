@@ -1,46 +1,46 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://fonts.cdnfonts.com/css/lets-coffee');
+@import url("https://fonts.cdnfonts.com/css/lets-coffee");
 
 @font-face {
   font-family: "Pixel";
-  src: url('/fonts/Pixel.ttf');
+  src: url("/fonts/Pixel.ttf");
 }
 
 @font-face {
   font-family: "Cholten";
-  src: url('/fonts/Cholten.otf');
+  src: url("/fonts/Cholten.otf");
 }
 
 @font-face {
   font-family: "NaturalPrecision";
-  src: url('/fonts/NaturalPrecision.ttf');
+  src: url("/fonts/NaturalPrecision.ttf");
 }
 
 @font-face {
   font-family: "Oserif";
-  src: url('/fonts/Oserif.ttf');
+  src: url("/fonts/Oserif.ttf");
 }
 
 @font-face {
   font-family: "Reiswar";
-  src: url('/fonts/reiswar.ttf');
+  src: url("/fonts/reiswar.ttf");
 }
 
 @font-face {
   font-family: "RokunaAlenthush";
-  src: url('/fonts/RokunaAlenthush.otf');
+  src: url("/fonts/RokunaAlenthush.otf");
 }
 
 @font-face {
   font-family: "RukishytrialRegular";
-  src: url('/fonts/RukishytrialRegular.otf');
+  src: url("/fonts/RukishytrialRegular.otf");
 }
 
 @font-face {
   font-family: "SnowyChrista";
-  src: url('/fonts/Snowy-Christa.otf');
+  src: url("/fonts/Snowy-Christa.otf");
 }
 
 @layer base {
@@ -50,63 +50,63 @@
 
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
- 
+
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
- 
+
     --primary: 222.2 47.4% 11.2%;
     --primary-foreground: 210 40% 98%;
- 
+
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
- 
+
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
- 
+
     --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
- 
+
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
- 
+
     --radius: 0.5rem;
   }
- 
+
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
- 
+
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
- 
+
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
- 
+
     --primary: 210 40% 98%;
     --primary-foreground: 222.2 47.4% 11.2%;
- 
+
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
- 
+
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
- 
+
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
- 
+
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
- 
+
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
   }
 }
- 
+
 @layer base {
   * {
     @apply border-border;
@@ -114,4 +114,10 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.pointsPattern {
+  background-image: radial-gradient(white 1px, transparent 0);
+  background-size: 40px 40px;
+  background-position: -19px -19px;
 }

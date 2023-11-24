@@ -33,6 +33,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "cors": "^2.8.5",
+    "edgestore": "^1.0.3",
     "html2canvas": "^1.4.1",
     "lucide-react": "^0.288.0",
     "next": "13.5.6",
